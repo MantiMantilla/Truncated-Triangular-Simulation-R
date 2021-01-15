@@ -31,11 +31,11 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   
   ## create a vector that describes the mean of the distribution
   trun.tri.mean <- if (a <= b & b < M) {
-    result.numerator <- (2 * (-3 * L * ((b ^ 2) / 2 - (a ^ 2) / 2) + b ^ 3 - a ^ 3)) / (3 * (U - L) * (M - L))
+    result.numerator <- (2 * (- 3 * L * ((b ^ 2) / 2 - (a ^ 2) / 2) + b ^ 3 - a ^ 3)) / (3 * (U - L) * (M - L))
     result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     result.numerator / result.denominator
   } else if (a < M & b >= M) {
-    result.numerator <- (-M ^ 3 * U - 2 * a ^ 3 * U + 3 * L * a ^ 2 * U + 3 * M * b ^ 2 * U - 3 * L * b ^ 2 * U + L * M ^ 3 + 2 * M * a ^ 3 - 3 * L * M * a ^ 2 - 2 * M * b ^ 3 + 2 * L * b ^ 3) / (3 * (U - L) * (M - L) * (U - M))
+    result.numerator <- (- M ^ 3 * U - 2 * a ^ 3 * U + 3 * L * a ^ 2 * U + 3 * M * b ^ 2 * U - 3 * L * b ^ 2 * U + L * M ^ 3 + 2 * M * a ^ 3 - 3 * L * M * a ^ 2 - 2 * M * b ^ 3 + 2 * L * b ^ 3) / (3 * (U - L) * (M - L) * (U - M))
     result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     result.numerator / result.denominator
   } else if (M <= a & a <= b) {
