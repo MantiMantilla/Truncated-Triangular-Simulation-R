@@ -16,7 +16,7 @@ vec <- rep(0, 1000)
 success.count <- 0
 while (success.count < 1000) {
   u.1 <- runif(n = 1, min = my.trun.tri.dist$trun.tri.lower, max = my.trun.tri.dist$trun.tri.upper)
-  u.2 <- runif(n = 1, min = 0, max = my.trun.tri.dist$trun.tri.mode)
+  u.2 <- runif(n = 1, min = 0, max = my.trun.tri.dist$pdf(my.trun.tri.dist$trun.tri.mode))
   if (u.2 <= my.trun.tri.dist$pdf(u.1)) {
     success.count <- success.count + 1
     vec[success.count] <- u.1
