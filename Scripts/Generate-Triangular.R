@@ -52,10 +52,10 @@ generate.triangular <- function(L, U, M) {
   ## create a vector that describes the mode of the distribution
   tri.mode <- M
   
-  ## create a vector that describes the upper bound of the distribution
+  ## create a vector that describes the upper bound of the distribution's range
   tri.upper <- U
   
-  ## create a vector that describes the lower bound of the distribution
+  ## create a vector that describes the lower bound of the distribution's range
   tri.lower <- L
   
   ## create a vector that describes the variance of the distribution
