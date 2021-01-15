@@ -1,5 +1,5 @@
 ## returns a function that returns a list with each of its elements defined as functions or vectors of one
-## element that describe aspects of a triangular distribution (pdf, cdf, mean, median, mode, upper bound, lower bound, variance).
+## element that describe aspects of a triangular distribution (pdf, cdf, inverse cdf, mean, median, mode, upper bound, lower bound, variance).
 
 generate.triangular <- function(L, U, M) {
   ## create a function that returns the pdf of the triangular, given some x.
@@ -39,6 +39,15 @@ generate.triangular <- function(L, U, M) {
     }
   }
   
+  ## create a function that returns the inverse cdf of the triangular, given some probability p.
+  inverse.cdf <- function(p) {
+    if (p.of.median < (b - a) / (c - a) ) {
+      return(a + sqrt((b - a) * (c - a) * p))
+    } else if (p.of.median >= (b - a) / (c - a)) {
+      return(c - sqrt((C - a) * (c - B) * (1 - p)))
+    }
+  }
+  
   ## create a vector that describes the mean of the distribution
   tri.mean <- (L + U + M) / 3
   
@@ -66,6 +75,7 @@ generate.triangular <- function(L, U, M) {
     list(
       pdf = pdf,
       cdf = cdf,
+      inverse.cdf = inverse.cdf,
       tri.mean = tri.mean,
       tri.median = tri.median,
       tri.mode = tri.mode,

@@ -1,5 +1,5 @@
 ## returns a function that returns a list with each of its elements defined as functions or vectors of one
-## element that describe aspects of a truncated triangular distribution (pdf, cdf, mean, median, mode, upper bound, lower bound, variance).
+## element that describe aspects of a truncated triangular distribution (pdf, cdf, inverse cdf, mean, median, mode, upper bound, lower bound, variance).
 
 generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   M <- orig.tri.dist$tri.mode
@@ -29,6 +29,15 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
     result <- (cumul.F(x) - cumul.F(a)) / (cumul.F(b) - cumul.F(a))
   }
   
+  ## create a function that returns the inverse cdf of the truncated triangular, given some probability, p.
+  # inverse.cdf <- function(p) {
+  #   if (p.of.median < (b - a) / (c - a) ) {
+  #     return(a + sqrt((b - a) * (c - a) * p))
+  #   } else if (p.of.median >= (b - a) / (c - a)) {
+  #     return(c - sqrt((C - a) * (c - B) * (1 - p)))
+  #   }
+  # }
+  
   ## create a vector that describes the mean of the distribution
   trun.tri.mean <- if (a <= b & b < M) {
     result.numerator <- (2 * (- 3 * L * ((b ^ 2) / 2 - (a ^ 2) / 2) + b ^ 3 - a ^ 3)) / (3 * (U - L) * (M - L))
@@ -42,14 +51,15 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
     result.numerator <- (3 * b ^ 2 * U - 3 * a ^ 2 * U - 2 * b ^ 3 + 2 * a ^ 3) / (3 * (U - L) * (U - M))
     result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     result.numerator / result.denominator
-  } 
+  }
   
   ## create a vector that describes the median of the distribution
-  # trun.tri.median <- if (c >= (a + b) / 2) {
-  #   a + sqrt(((b - a) * (c - a)) / 2)
-  # } else if (c < (a + b) / 2) {
-  #   b - sqrt(((b - a) * (b - c)) / 2)
-  # }
+  p.of.median <- (orig.tri.dist$cdf(a) + orig.tri.dist$cdf(b)) / 2
+  trun.tri.median <- if (p.of.median < (U - L) / (M - L)) {
+    L + sqrt((U - L) * (M - L) * p.of.median)
+  } else if (p.of.median >= (U - L) / (M - L)) {
+    M - sqrt((M - L) * (M - U) * (1 - p.of.median))
+  }
   
   ## create a vector that describes the mode of the distribution
   trun.tri.mode <- if (a <= b & b <= M) {
@@ -67,20 +77,33 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   trun.tri.lower <- a
   
   ## create a vector that describes the variance of the distribution
-  # trun.tri.var <-
+  trun.tri.var <- if (a <= b & b < M) {
+    result.numerator <- (- 4 * L * ((b ^ 3) / 3 - (a ^ 3) / 3) + b ^ 4 - a ^ 4) / (2 * (U - L) * (M - L))
+    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+  } else if (a < M & b >= M) {
+    result.numerator <- (- M ^ 4 * U - 3 * a ^ 4 * U + 4 * L * a ^ 3 * U + 4 * M * b ^ 3 * U - 4 * L * b ^ 3 * U + L * M ^ 4 + 3 * M * a ^ 4 - 4 * L * M * a ^ 3 - 3 * M * b ^ 4 + 3 * L * b ^ 4) / (6 * (U - L) * (M - L) * (U - M))
+    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+  } else if (M <= a & a <= b) {
+    result.numerator <- (4 * (b ^ 3) * U - 4 * (a ^ 3) * U - 2 * b ^ 4 + 3 * a ^ 4) / (6 * (U - L) * (U - M))
+    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+  }
   
   return(
     list(
       pdf = pdf,
       cdf = cdf,
+      # inverse.cdf = inverse.cdf,
       trun.tri.mean = trun.tri.mean,
-      # trun.tri.median = trun.tri.median,
+      trun.tri.median = trun.tri.median,
       trun.tri.mode = trun.tri.mode,
       trun.tri.upper = trun.tri.upper,
-      trun.tri.lower = trun.tri.lower#,
-      # trun.tri.var = trun.tri.var
+      trun.tri.lower = trun.tri.lower,
+      trun.tri.var = trun.tri.var
     )
   )
 }
 
-## TODO: implement median and variance vector values.
+## TODO: implement inverse cdf function.

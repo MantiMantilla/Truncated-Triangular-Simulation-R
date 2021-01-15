@@ -11,7 +11,13 @@ my.trun.tri.dist <- generate.truncated.triangular(a = 3, b = 8, orig.tri.dist = 
 # Calculate the mean of the distribution
 mu <- my.trun.tri.dist$trun.tri.mean
 
-# simulate 1000 instances of a random variable with f(x) = truncated triangular.
+# Calculate the median of the distribution
+med <- my.trun.tri.dist$trun.tri.median
+
+# Calculate the variance of the distribution
+variance <- my.trun.tri.dist$trun.tri.var
+
+# simulate 1000 instances of a random variable with f(x) = truncated triangular by trial and error.
 vec <- rep(0, 1000)
 success.count <- 0
 while (success.count < 1000) {
@@ -23,4 +29,9 @@ while (success.count < 1000) {
   }
 }
 
+# TODO: simulate 1000 instances of a random variable with f(x) = truncated triangular by inverse cdf method (Faster than by trial and error).
+
 hist(vec, xlab = "x")
+mean(vec)
+median(vec)
+var(vec)
