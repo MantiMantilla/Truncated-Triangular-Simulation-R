@@ -23,4 +23,4 @@ while (success.count < 1000) {
   }
 }
 
-hist(vec)
+hist(vec, xlab = "x")
