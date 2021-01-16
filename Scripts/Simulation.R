@@ -1,23 +1,26 @@
-# Import relevant functions to generate triangular and truncated triangular distributions with cached properties (created as a list).
+## Import relevant functions to generate triangular and truncated triangular distributions with cached properties (created as a list).
 source(file.path("Scripts","Generate-Triangular.R"))
 source(file.path("Scripts","Generate-Truncated-Triangular.R"))
 
-# Create a list that contains the major properties of a triangular distribution with L = 2, U = 9, and M = 7
+## Set a seed so results as replicable
+set.seed(10)
+
+## Create a list that contains the major properties of a triangular distribution with L = 2, U = 9, and M = 7
 my.tri.dist <- generate.triangular(L = 2, U = 9, M = 7)
 
-# Create a list that contains the major properties of a truncated triangular distribution between a = 3 and b = 8, based on the previous triangular.
+## Create a list that contains the major properties of a truncated triangular distribution between a = 3 and b = 8, based on the previous triangular.
 my.trun.tri.dist <- generate.truncated.triangular(a = 3, b = 8, orig.tri.dist = my.tri.dist)
 
-# Calculate the mean of the distribution
-mu <- my.trun.tri.dist$trun.tri.mean
+## Calculate the mean of the distribution
+print(paste("Analytical Mean: ", my.trun.tri.dist$trun.tri.mean))
 
-# Calculate the median of the distribution
-med <- my.trun.tri.dist$trun.tri.median
+## Calculate the median of the distribution
+print(paste("Analytical Median: ", my.trun.tri.dist$trun.tri.median))
 
-# Calculate the variance of the distribution
-variance <- my.trun.tri.dist$trun.tri.var
+## Calculate the variance of the distribution
+print(paste("Analytical Variance: ", my.trun.tri.dist$trun.tri.var))
 
-# simulate 1000 instances of a random variable with f(x) = truncated triangular by trial and error.
+## Simulate 1000 instances of a random variable with f(x) = truncated triangular by trial and error.
 vec <- rep(0, 1000)
 success.count <- 0
 while (success.count < 1000) {
@@ -29,9 +32,22 @@ while (success.count < 1000) {
   }
 }
 
-# TODO: simulate 1000 instances of a random variable with f(x) = truncated triangular by inverse cdf method (Faster than by trial and error).
+## Simulate 1000 instances of a random variable with f(x) = truncated triangular by inverse cdf method (Faster than by trial and error).
+vec2 <- rep(0, 1000)
+rand.unif <- runif(1000, min = 0, max = 1)
+for (i in 1:1000) {
+  val <- my.trun.tri.dist$inverse.cdf(rand.unif[i])
+  vec2[i] <- val
+}
 
+## Plot and decribe the first simulation
 hist(vec, xlab = "x")
-mean(vec)
-median(vec)
-var(vec)
+print(paste("Simulated Mean 1: ", mean(vec)))
+print(paste("Simulated Median 1: ", median(vec)))
+print(paste("Simulated Variance 1: ", var(vec)))
+
+## Plot and decribe the second simulation
+hist(vec2, xlab = "x")
+print(paste("Simulated Mean 2: ", mean(vec2)))
+print(paste("Simulated Median 2: ", median(vec2)))
+print(paste("Simulated Variance 2: ", var(vec2)))

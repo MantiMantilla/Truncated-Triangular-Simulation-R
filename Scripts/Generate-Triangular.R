@@ -1,76 +1,71 @@
-## returns a function that returns a list with each of its elements defined as functions or vectors of one
-## element that describe aspects of a triangular distribution (pdf, cdf, inverse cdf, mean, median, mode, upper bound, lower bound, variance).
-
+## Returns a function that returns a list with each of its elements defined as functions or vectors of one
+## element that describe aspects of a triangular distribution
+## (pdf, cdf, inverse cdf, mean, median, mode, upper bound, lower bound, variance)
 generate.triangular <- function(L, U, M) {
-  ## create a function that returns the pdf of the triangular, given some x.
+  
+  ## Create a function that returns the pdf of the triangular, given some x.
   pdf <- function(x) {
     if (x < L) {
       result <- 0
-      return(result)
     } else if (x < M) {
       result <- 2 * (x - L) / ((U - L) * (M - L))
-      return(result)
     } else if (x == M) {
       result <- 2 / (U - L)
-      return(result)
     } else if (x <= U) {
       result <- 2 * (U - x) / ((U - L) * (U - M))
-      return(result)
     } else if (U < x) {
       result <- 0
-      return(result)
     }
+    return(result)
   }
   
-  ## create a function that returns the cdf of the triangular, given some x.
+  ## Create a function that returns the cdf of the triangular, given some x.
   cdf <- function(x) {
     if (x <= L) {
       result <- 0
-      return(result)
     } else if (x <= M) {
       result <- ((x - L) ^ 2) / ((U - L) * (M - L))
-      return(result)
     } else if (x < U) {
       result <- 1 - ((U - x) ^ 2) / ((U - L) * (U - M))
-      return(result)
     } else if (U <= x) {
       result <- 1
-      return(result)
     }
+    return(result)
   }
   
-  ## create a function that returns the inverse cdf of the triangular, given some probability p.
+  ## Create a function that returns the inverse cdf of the triangular, given some probability p.
   inverse.cdf <- function(p) {
-    if (p.of.median < (b - a) / (c - a) ) {
-      return(a + sqrt((b - a) * (c - a) * p))
-    } else if (p.of.median >= (b - a) / (c - a)) {
-      return(c - sqrt((C - a) * (c - B) * (1 - p)))
+    if (p < (M - L) / (U - L) ) {
+      result <- L + sqrt(max(0, (M - L) * (U - L) * p))
+    } else if (p >= (M - L) / (U - L)) {
+      result <- U - sqrt(max(0, (U - L) * (U - M) * (1 - p)))
     }
+    return(result)
   }
   
-  ## create a vector that describes the mean of the distribution
+  ## Create a vector of length 1 that describes the mean of the distribution
   tri.mean <- (L + U + M) / 3
   
-  ## create a vector that describes the median of the distribution
+  ## Create a vector of length 1 that describes the median of the distribution
   tri.median <- if (M >= (L + U) / 2) {
     L + sqrt(((U - L) * (M - L)) / 2)
   } else if (M < (L + U) / 2) {
     U - sqrt(((U - L) * (U - M)) / 2)
   }
   
-  ## create a vector that describes the mode of the distribution
+  ## Create a vector of length 1 that describes the mode of the distribution
   tri.mode <- M
   
-  ## create a vector that describes the upper bound of the distribution's range
+  ## Create a vector of length 1 that describes the upper bound of the distribution's range
   tri.upper <- U
   
-  ## create a vector that describes the lower bound of the distribution's range
+  ## Create a vector of length 1 that describes the lower bound of the distribution's range
   tri.lower <- L
   
-  ## create a vector that describes the variance of the distribution
-  tri.var <-
-    ((L ^ 2) + (U ^ 2) + (M ^ 2) - L * U - L * M - U * M) / 18
+  ## Create a vector of length 1 that describes the variance of the distribution
+  tri.var <- ((L ^ 2) + (U ^ 2) + (M ^ 2) - L * U - L * M - U * M) / 18
   
+  ## Build the list and return it. This list contains all major properties of the triangular distribution
   return(
     list(
       pdf = pdf,
