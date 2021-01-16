@@ -70,10 +70,10 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
     a
   }
   
-  ## Create a vector of length 1 that describes the upper bound of the distribution's range
+  ## Create a vector of length 1 that describes the upper bound of the distribution's domain
   trun.tri.upper <- b
   
-  ## Create a vector of length 1 that describes the lower bound of the distribution's range
+  ## Create a vector of length 1 that describes the lower bound of the distribution's domain
   trun.tri.lower <- a
   
   ## Create a vector of length 1 that describes the variance of the distribution
