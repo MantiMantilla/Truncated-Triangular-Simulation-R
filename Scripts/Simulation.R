@@ -1,3 +1,5 @@
+## TODO: Turn into R-Markdown and publish as website.
+
 ## Import relevant functions to generate triangular and truncated triangular distributions with cached properties (created as a list).
 source(file.path("Scripts","Generate-Triangular.R"))
 source(file.path("Scripts","Generate-Truncated-Triangular.R"))
@@ -54,6 +56,8 @@ for (i in 1:1000) {
   val <- my.trun.tri.dist$inverse.cdf(rand.unif[i])
   vec2[i] <- val
 }
+
+## TODO: add more bins to the histograms.
 
 ## Plot and describe the first simulation
 hist(vec, xlab = "x")
