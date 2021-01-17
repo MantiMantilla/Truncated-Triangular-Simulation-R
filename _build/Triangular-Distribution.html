@@ -391,17 +391,23 @@ summary {
 
 <div id="motivation" class="section level2">
 <h2>Motivation</h2>
-<p>The <em>triangular distribution</em> is a thoroughly studied <em>probability density function</em> (pdf) that usually arises to describe the behavior of a real (<span class="math inline">\(\mathbb{R}\)</span>) random variable for which little information is available. The distribution is an easy fit for most practical scenarios and, as such, makes it extremely versatile as a means to model non-deterministic scenarios mathematically. To further aid our analysis, we consider the <em>truncated distribution</em>, a generic term that encompasses a transform of any given pdf such that it remains a pdf after restricting the function’s domain to an interval within. Our end goal is to perform a few analytical procedures to find parameterized expressions for a few major descriptive statistics and functions (such as the cdf) of both distributions and implement them in the R language. To show how one may realistically use these implementations we will explore a practical example wherein a <em>triangular distribution</em> and a corresponding <em>truncated triangular distribution</em> are constructed using our implementation and then used to generate random samples with <em>Monte Carlo simulation</em>.</p>
+<p>The <em>triangular distribution</em> is a thoroughly studied <em>probability density function</em> (PDF) that usually arises to describe the behavior of a real (<span class="math inline">\(\mathbb{R}\)</span>) random variable for which little information is available. The distribution is an easy fit for most practical scenarios and, as such, makes it extremely versatile as a means to model non-deterministic scenarios mathematically. To further aid our analysis, we consider the <em>truncated distribution</em>, a generic term that encompasses a transform of any given PDF such that it remains a PDF after restricting the function’s domain to an interval within. Our end goal is to perform a few analytical procedures to find parameterized expressions for a few major descriptive statistics and functions (such as the CDF) of both distributions and implement them in the R language. To show how one may realistically use these implementations we will explore a practical example wherein a <em>triangular distribution</em> and a corresponding <em>truncated triangular distribution</em> are constructed using our implementation and then used to generate random samples with <em>Monte Carlo simulation</em>.</p>
 </div>
 <div id="your-own-flare" class="section level2">
 <h2>Your own flare</h2>
 <p>Those familiar with <em>object-oriented programming</em> might notice our approach takes after a few basic concepts such as <em>constructor functions</em> and <em>composition</em>. If this sounds interesting to you, I encourage you to add your own twist to this exercise and use <em>classes</em> instead of <em>lists</em> but know that it is not a must and we will be using only the most rudimentary features R has to offer.</p>
 <p>This implementation was designed with adaptability in mind, meaning that the same approach should also be compatible with other scripting languages such as <em>Python</em> or <em>JavaScript</em>. No external <em>packages</em> or <em>libraries</em> are required.</p>
 </div>
-<div id="project-home-disclaimer-and-acknowledgments" class="section level2">
-<h2>Project home, disclaimer, and acknowledgments</h2>
+<div id="project-home" class="section level2">
+<h2>Project home</h2>
 <p>All documents, markdown files, scripts, and project images are publicly available in <a href="https://github.com/MantiMantilla/Truncated-Triangular-Simulation-R">this repository</a>.</p>
+</div>
+<div id="disclaimer" class="section level2">
+<h2>Disclaimer</h2>
 <p>All errors are my own. All feedback is welcome.</p>
+</div>
+<div id="acknowledgments" class="section level2">
+<h2>Acknowledgments</h2>
 <p>Special thanks to Alfaima Solano from Universidad de los Andes for their feedback on this project.</p>
 </div>
 <div id="author" class="section level2">
@@ -409,6 +415,14 @@ summary {
 <p>Alejandro Mantilla</p>
 <p>Data Scientist and Engineer</p>
 <p>Bogotá, Colombia</p>
+</div>
+<div id="license" class="section level2">
+<h2>License</h2>
+<p>MIT License</p>
+<p>Copyright (c) 2021 Alejandro Mantilla</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 </div>
 
 
