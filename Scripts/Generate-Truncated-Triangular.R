@@ -9,13 +9,13 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   U <- orig.tri.dist$tri.upper
   
   ## Throw an error if the new bounds do not fall witin the old bounds of the triangular pdf.
-  if(a < L | b > U) {
+  if (a < L | b > U) {
     stop("The new bounds of the pdf do not fall within the original range")
   }
   
   ## Create a function that returns the pdf of the truncated triangular, given some x.
   pdf <- function(x) {
-    if(a < x & x <= b){
+    if (a < x & x <= b) {
       pdf.g <- orig.tri.dist$pdf
       cumul.F <- orig.tri.dist$cdf
       result <- pdf.g(x) / (cumul.F(b) - cumul.F(a))
@@ -34,22 +34,31 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   
   ## Create a function that returns the inverse cdf of the truncated triangular, given some probability p.
   inverse.cdf <- function(p) {
-    result <- orig.tri.dist$inverse.cdf(p * (orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)) + orig.tri.dist$cdf(a))
+    result <-
+      orig.tri.dist$inverse.cdf(p * (orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)) + orig.tri.dist$cdf(a))
     return(result)
   }
   
   ## Create a vector of length 1 that describes the mean of the distribution
   trun.tri.mean <- if (a <= b & b < M) {
-    result.numerator <- (2 * (- 3 * L * ((b ^ 2) / 2 - (a ^ 2) / 2) + b ^ 3 - a ^ 3)) / (3 * (U - L) * (M - L))
-    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator <-
+      (2 * (-3 * L * ((b ^ 2) / 2 - (a ^ 2) / 2) + b ^ 3 - a ^ 3)) / (3 * (U - L) * (M - L))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     result.numerator / result.denominator
   } else if (a < M & b >= M) {
-    result.numerator <- (- M ^ 3 * U - 2 * a ^ 3 * U + 3 * L * a ^ 2 * U + 3 * M * b ^ 2 * U - 3 * L * b ^ 2 * U + L * M ^ 3 + 2 * M * a ^ 3 - 3 * L * M * a ^ 2 - 2 * M * b ^ 3 + 2 * L * b ^ 3) / (3 * (U - L) * (M - L) * (U - M))
-    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator <-
+      (
+        -M ^ 3 * U - 2 * a ^ 3 * U + 3 * L * a ^ 2 * U + 3 * M * b ^ 2 * U - 3 * L * b ^ 2 * U + L * M ^ 3 + 2 * M * a ^ 3 - 3 * L * M * a ^ 2 - 2 * M * b ^ 3 + 2 * L * b ^ 3
+      ) / (3 * (U - L) * (M - L) * (U - M))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     result.numerator / result.denominator
   } else if (M <= a & a <= b) {
-    result.numerator <- (3 * b ^ 2 * U - 3 * a ^ 2 * U - 2 * b ^ 3 + 2 * a ^ 3) / (3 * (U - L) * (U - M))
-    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator <-
+      (3 * b ^ 2 * U - 3 * a ^ 2 * U - 2 * b ^ 3 + 2 * a ^ 3) / (3 * (U - L) * (U - M))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     result.numerator / result.denominator
   }
   
@@ -64,9 +73,9 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   ## Create a vector of length 1 that describes the mode of the distribution
   trun.tri.mode <- if (a <= b & b <= M) {
     b
-  } else if(a <= b & b >= M) {
+  } else if (a <= b & b >= M) {
     M
-  } else if(a >= M & b >= a) {
+  } else if (a >= M & b >= a) {
     a
   }
   
@@ -78,16 +87,24 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   
   ## Create a vector of length 1 that describes the variance of the distribution
   trun.tri.var <- if (a <= b & b < M) {
-    result.numerator <- (- 4 * L * ((b ^ 3) / 3 - (a ^ 3) / 3) + b ^ 4 - a ^ 4) / (2 * (U - L) * (M - L))
-    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator <-
+      (-4 * L * ((b ^ 3) / 3 - (a ^ 3) / 3) + b ^ 4 - a ^ 4) / (2 * (U - L) * (M - L))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     (result.numerator / result.denominator) - trun.tri.mean ^ 2
   } else if (a < M & b >= M) {
-    result.numerator <- (- M ^ 4 * U - 3 * a ^ 4 * U + 4 * L * a ^ 3 * U + 4 * M * b ^ 3 * U - 4 * L * b ^ 3 * U + L * M ^ 4 + 3 * M * a ^ 4 - 4 * L * M * a ^ 3 - 3 * M * b ^ 4 + 3 * L * b ^ 4) / (6 * (U - L) * (M - L) * (U - M))
-    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator <-
+      (
+        -M ^ 4 * U - 3 * a ^ 4 * U + 4 * L * a ^ 3 * U + 4 * M * b ^ 3 * U - 4 * L * b ^ 3 * U + L * M ^ 4 + 3 * M * a ^ 4 - 4 * L * M * a ^ 3 - 3 * M * b ^ 4 + 3 * L * b ^ 4
+      ) / (6 * (U - L) * (M - L) * (U - M))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     (result.numerator / result.denominator) - trun.tri.mean ^ 2
   } else if (M <= a & a <= b) {
-    result.numerator <- (4 * (b ^ 3) * U - 4 * (a ^ 3) * U - 2 * b ^ 4 + 3 * a ^ 4) / (6 * (U - L) * (U - M))
-    result.denominator <- orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator <-
+      (4 * (b ^ 3) * U - 4 * (a ^ 3) * U - 2 * b ^ 4 + 3 * a ^ 4) / (6 * (U - L) * (U - M))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     (result.numerator / result.denominator) - trun.tri.mean ^ 2
   }
   

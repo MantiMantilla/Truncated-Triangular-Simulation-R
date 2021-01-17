@@ -35,7 +35,7 @@ generate.triangular <- function(L, U, M) {
   
   ## Create a function that returns the inverse cdf of the triangular, given some probability p.
   inverse.cdf <- function(p) {
-    if (p < (M - L) / (U - L) ) {
+    if (p < (M - L) / (U - L)) {
       result <- L + sqrt(max(0, (M - L) * (U - L) * p))
     } else if (p >= (M - L) / (U - L)) {
       result <- U - sqrt(max(0, (U - L) * (U - M) * (1 - p)))
@@ -63,7 +63,8 @@ generate.triangular <- function(L, U, M) {
   tri.lower <- L
   
   ## Create a vector of length 1 that describes the variance of the distribution
-  tri.var <- ((L ^ 2) + (U ^ 2) + (M ^ 2) - L * U - L * M - U * M) / 18
+  tri.var <-
+    ((L ^ 2) + (U ^ 2) + (M ^ 2) - L * U - L * M - U * M) / 18
   
   ## Build the list and return it. This list contains all major properties of the triangular distribution
   return(
