@@ -15,19 +15,16 @@ my.trun.tri.dist <-
                                 orig.tri.dist = my.tri.dist)
 
 ## Plot and describe the triangular distribution
-tri.dist.domain <- seq(my.tri.dist$tri.lower, my.tri.dist$tri.upper, 0.001)
-tri.dist.range <- rep(0, length(tri.dist.domain))
-for (i in 1:length(tri.dist.domain)) {
-  tri.dist.range[i] <- my.tri.dist$pdf(tri.dist.domain[i])
-}
-plot(
-  y = tri.dist.range,
-  x = tri.dist.domain,
-  type = "l",
-  ylim = c(0, max(tri.dist.range)),
-  main = "Triangular Distribution - PDF",
+plot.function(
+  function(x) {
+    sapply(x, FUN = my.tri.dist$pdf)
+  },
+  from = 2,
+  to = 9,
+  n = 100000,
+  ylab = "f(x)",
   xlab = "x",
-  ylab = "f(x)"
+  main = "Triangular Distribution - PDF"
 )
 print("Triangular Distribution:")
 print(paste("Analytical Mean: ", my.tri.dist$tri.mean))
@@ -35,20 +32,16 @@ print(paste("Analytical Median: ", my.tri.dist$tri.median))
 print(paste("Analytical Variance: ", my.tri.dist$tri.var))
 
 ## Plot and describe the truncated triangular distribution
-trun.tri.dist.domain <- seq(my.trun.tri.dist$trun.tri.lower, my.trun.tri.dist$trun.tri.upper + 0.001, 0.001)
-trun.tri.dist.range <- rep(0, length(trun.tri.dist.domain))
-for (i in 1:length(trun.tri.dist.domain)) {
-  trun.tri.dist.range[i] <-
-    my.trun.tri.dist$pdf(trun.tri.dist.domain[i])
-}
-plot(
-  y = trun.tri.dist.range,
-  x = trun.tri.dist.domain,
-  type = "l",
-  ylim = c(0, max(trun.tri.dist.range)),
-  main = "Triangular Distribution - PDF",
+plot.function(
+  function(x) {
+    sapply(x, FUN = my.trun.tri.dist$pdf)
+  },
+  from = 2.99999,
+  to = 8.0001,
+  n = 100000,
+  ylab = "f( x | a < x < b )",
   xlab = "x",
-  ylab = "f( x | a < x < b )"
+  main = "Truncated Triangular Distribution - PDF"
 )
 print("Truncated Triangular Distribution:")
 print(paste("Analytical Mean: ", my.trun.tri.dist$trun.tri.mean))
@@ -85,22 +78,44 @@ for (i in 1:10000) {
   vec2[i] <- val
 }
 
+trun.vector.pdf <- function(x) {
+  sapply(x, FUN = my.trun.tri.dist$pdf)
+}
+
 ## Plot and describe the first simulation
 hist(vec,
      xlab = "x",
      breaks = (my.trun.tri.dist$trun.tri.upper - my.trun.tri.dist$trun.tri.lower) * 10,
      freq = FALSE)
-lines(y = trun.tri.dist.range, x = trun.tri.dist.domain, col = "red")
+curve(
+  trun.vector.pdf,
+  from = 2.99999,
+  to = 8.0001,
+  n = 100000,
+  col = "red",
+  add = TRUE
+)
+
+#lines(y = trun.tri.dist.range, x = trun.tri.dist.domain, col = "red")
 print(paste("Simulated Mean 1: ", mean(vec)))
 print(paste("Simulated Median 1: ", median(vec)))
 print(paste("Simulated Variance 1: ", var(vec)))
 
 ## Plot and describe the second simulation
+
 hist(vec2,
      xlab = "x",
      breaks = (my.trun.tri.dist$trun.tri.upper - my.trun.tri.dist$trun.tri.lower) * 10,
      freq = FALSE)
-lines(y = trun.tri.dist.range, x = trun.tri.dist.domain, col = "red")
+curve(
+  trun.vector.pdf,
+  from = 2.99999,
+  to = 8.0001,
+  n = 100000,
+  col = "red",
+  add = TRUE
+)
+#lines(y = trun.tri.dist.range, x = trun.tri.dist.domain, col = "red")
 print(paste("Simulated Mean 2: ", mean(vec2)))
 print(paste("Simulated Median 2: ", median(vec2)))
 print(paste("Simulated Variance 2: ", var(vec2)))
