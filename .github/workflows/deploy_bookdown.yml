@@ -42,11 +42,9 @@ jobs:
          name: _book # optional
          # Destination path
          path: _book # optional
-     - name: Deploy to GitHub Pages
-       uses: Cecilapp/GitHub-Pages-deploy@master
+     # Push the site's HTML to github-pages
+     - name: GitHub Pages action
+       uses: peaceiris/actions-gh-pages@v3.6.1
        with:
-         build_dir: _book/ 
-       env:
-         EMAIL: ${{ secrets.EMAIL }}               # must be a verified email
-         GH_TOKEN: ${{ secrets.GH_PAT }} # https://github.com/settings/tokens
-         BUILD_DIR: _book/                     # "_site/" by default
+        github_token: ${{ secrets.GH_PAT }}
+        publish_dir: ./_book/
