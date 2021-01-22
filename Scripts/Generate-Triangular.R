@@ -47,11 +47,7 @@ generate.triangular <- function(L, U, M) {
   tri.mean <- (L + U + M) / 3
   
   ## Create a vector of length 1 that describes the median of the distribution
-  tri.median <- if (M >= (L + U) / 2) {
-    L + sqrt(((U - L) * (M - L)) / 2)
-  } else if (M < (L + U) / 2) {
-    U - sqrt(((U - L) * (U - M)) / 2)
-  }
+  tri.median <- inverse.cdf(0.5)
   
   ## Create a vector of length 1 that describes the mode of the distribution
   tri.mode <- M

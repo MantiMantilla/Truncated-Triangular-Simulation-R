@@ -29,7 +29,14 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   ## Create a function that returns the cdf of the truncated triangular, given some x.
   cdf <- function(x) {
     cumul.F <- orig.tri.dist$cdf
-    result <- (cumul.F(x) - cumul.F(a)) / (cumul.F(b) - cumul.F(a))
+    if (x <= a) {
+      result <- 0
+    } else if (a < x & x <= b) {
+      result <- (cumul.F(x) - cumul.F(a)) / (cumul.F(b) - cumul.F(a))
+    } else if (b < x) {
+      result <- 1
+    }
+    return(result)
   }
   
   ## Create a function that returns the inverse cdf of the truncated triangular, given some probability p.
@@ -63,12 +70,8 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   }
   
   ## Create a vector of length 1 that describes the median of the distribution
-  p.of.median <- (orig.tri.dist$cdf(a) + orig.tri.dist$cdf(b)) / 2
-  trun.tri.median <- if (p.of.median < (U - L) / (M - L)) {
-    L + sqrt((U - L) * (M - L) * p.of.median)
-  } else if (p.of.median >= (U - L) / (M - L)) {
-    M - sqrt((M - L) * (M - U) * (1 - p.of.median))
-  }
+  
+  trun.tri.median <- inverse.cdf(0.5)
   
   ## Create a vector of length 1 that describes the mode of the distribution
   trun.tri.mode <- if (a <= b & b <= M) {
