@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Triangular Distribution | Simulating the Truncated Triangular Distribution</title>
+  <meta name="description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Triangular Distribution | Simulating the Truncated Triangular Distribution" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="github-repo" content="MantiMantilla/Truncated-Triangular-Simulation-R" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Triangular Distribution | Simulating the Truncated Triangular Distribution" />
+  
+  <meta name="twitter:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  
+
+<meta name="author" content="Alejandro Mantilla" />
+
+
+<meta name="date" content="2021-01-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="truncated-triangular-distribution.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Intro</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#motivation"><i class="fa fa-check"></i><b>1.1</b> Motivation</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#your-own-flare"><i class="fa fa-check"></i><b>1.2</b> Your own flare</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#project-home"><i class="fa fa-check"></i><b>1.3</b> Project home</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#disclaimer"><i class="fa fa-check"></i><b>1.4</b> Disclaimer</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#acknowledgments"><i class="fa fa-check"></i><b>1.5</b> Acknowledgments</a></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#author"><i class="fa fa-check"></i><b>1.6</b> Author</a></li>
+<li class="chapter" data-level="1.7" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i><b>1.7</b> License</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="triangular-distribution.html"><a href="triangular-distribution.html"><i class="fa fa-check"></i><b>2</b> Triangular Distribution</a><ul>
+<li class="chapter" data-level="2.1" data-path="triangular-distribution.html"><a href="triangular-distribution.html#distributions"><i class="fa fa-check"></i><b>2.1</b> Distributions</a></li>
+<li class="chapter" data-level="2.2" data-path="triangular-distribution.html"><a href="triangular-distribution.html#triangular-pdf"><i class="fa fa-check"></i><b>2.2</b> Triangular PDF</a></li>
+<li class="chapter" data-level="2.3" data-path="triangular-distribution.html"><a href="triangular-distribution.html#triangular-cdf"><i class="fa fa-check"></i><b>2.3</b> Triangular CDF</a></li>
+<li class="chapter" data-level="2.4" data-path="triangular-distribution.html"><a href="triangular-distribution.html#inverse-triangular-cdf"><i class="fa fa-check"></i><b>2.4</b> Inverse Triangular CDF</a></li>
+<li class="chapter" data-level="2.5" data-path="triangular-distribution.html"><a href="triangular-distribution.html#measures-of-central-tendency-and-spread"><i class="fa fa-check"></i><b>2.5</b> Measures of Central Tendency and Spread</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="triangular-distribution.html"><a href="triangular-distribution.html#mean"><i class="fa fa-check"></i><b>2.5.1</b> Mean</a></li>
+<li class="chapter" data-level="2.5.2" data-path="triangular-distribution.html"><a href="triangular-distribution.html#median"><i class="fa fa-check"></i><b>2.5.2</b> Median</a></li>
+<li class="chapter" data-level="2.5.3" data-path="triangular-distribution.html"><a href="triangular-distribution.html#mode"><i class="fa fa-check"></i><b>2.5.3</b> Mode</a></li>
+<li class="chapter" data-level="2.5.4" data-path="triangular-distribution.html"><a href="triangular-distribution.html#variance"><i class="fa fa-check"></i><b>2.5.4</b> Variance</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="triangular-distribution.html"><a href="triangular-distribution.html#an-object-to-hold-these-properties"><i class="fa fa-check"></i><b>2.6</b> An Object to Hold These Properties</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html"><i class="fa fa-check"></i><b>3</b> Truncated Triangular Distribution</a><ul>
+<li class="chapter" data-level="3.1" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#truncated-distribution"><i class="fa fa-check"></i><b>3.1</b> Truncated Distribution</a></li>
+<li class="chapter" data-level="3.2" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#truncated-triangular-pdf"><i class="fa fa-check"></i><b>3.2</b> Truncated Triangular PDF</a></li>
+<li class="chapter" data-level="3.3" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#truncated-triangular-cdf"><i class="fa fa-check"></i><b>3.3</b> Truncated Triangular CDF</a></li>
+<li class="chapter" data-level="3.4" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#inverse-truncated-triangular-cdf"><i class="fa fa-check"></i><b>3.4</b> Inverse Truncated Triangular CDF</a></li>
+<li class="chapter" data-level="3.5" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#measures-of-central-tendency-and-spread-1"><i class="fa fa-check"></i><b>3.5</b> Measures of Central Tendency and Spread</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#mean-1"><i class="fa fa-check"></i><b>3.5.1</b> Mean</a></li>
+<li class="chapter" data-level="3.5.2" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#median-1"><i class="fa fa-check"></i><b>3.5.2</b> Median</a></li>
+<li class="chapter" data-level="3.5.3" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#mode-1"><i class="fa fa-check"></i><b>3.5.3</b> Mode</a></li>
+<li class="chapter" data-level="3.5.4" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#variance-1"><i class="fa fa-check"></i><b>3.5.4</b> Variance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#an-object-to-hold-these-properties-1"><i class="fa fa-check"></i><b>3.6</b> An Object to Hold These Properties</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html"><i class="fa fa-check"></i><b>4</b> Simulation and Validation.</a><ul>
+<li class="chapter" data-level="4.1" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#r-markdown"><i class="fa fa-check"></i><b>4.1</b> R Markdown</a></li>
+<li class="chapter" data-level="4.2" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#including-plots"><i class="fa fa-check"></i><b>4.2</b> Including Plots</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Simulating the Truncated Triangular Distribution</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="triangular-distribution" class="section level1">
+<h1><span class="header-section-number">2</span> Triangular Distribution</h1>
+<div id="distributions" class="section level2">
+<h2><span class="header-section-number">2.1</span> Distributions</h2>
+<p>Probability density functions describe how likely it is for a continuous random variable <span class="math inline">\(X\)</span> to fall within some region of its domain. For any single point the probability is cero but at intervals we can calculate the integral of the PDF and find the corresponding probability. Consider the following conventions:</p>
+<blockquote>
+<p>Let <span class="math inline">\(X\)</span> be a random variable with distribution <span class="math inline">\(f(x)\)</span></p>
+</blockquote>
+<p>This way of defining random variables lets on some basic information about how it may behave but is lengthy and unnecessary.</p>
+<blockquote>
+<p>Let <span class="math inline">\(X\sim f(x)\)</span></p>
+</blockquote>
+<p>Much better.</p>
+<blockquote>
+<p>Let <span class="math inline">\(X\sim f(x) = \frac{e^{-\frac{1}{2}\left( \frac{x-\mu}{\sigma}\right)^{2}}}{\sigma \sqrt{2\pi}}\)</span></p>
+</blockquote>
+<p>A PDF will sometimes be defined for the entire real number line in a single expression like the ubiquitous normal distribution, while others require you to write piecewise functions such as the triangular distribution.</p>
+<blockquote>
+<p>Let <span class="math inline">\(X\sim Norm(\mu, \sigma^{2})\)</span> and <span class="math inline">\(Y\sim Triangular(L,U,M)\)</span></p>
+</blockquote>
+<p>We use a shorthand notation for widely used distributions that would usually take too much effort to remember or write out.</p>
+</div>
+<div id="triangular-pdf" class="section level2">
+<h2><span class="header-section-number">2.2</span> Triangular PDF</h2>
+<p>The triangular distribution specifically has the following PDF.</p>
+<p><span class="math display">\[
+  f(x)=
+  \begin{cases}
+    \frac{2(x-L)}{(U-L)(M-L)}\quad&amp;(L\leq x&lt;M)\\
+    \frac{2(U-x)}{(U-L)(U-M)}\quad&amp;(M\leq x\leq U)\\
+  \end{cases}
+\]</span></p>
+<p>Though complicated at first sight, it really just describes two lines that form a triangle with the <span class="math inline">\(x\)</span> axis. <span class="math inline">\(L\)</span> and <span class="math inline">\(U\)</span> stand for the lower and upper values that delimit the distribution and <span class="math inline">\(M\)</span> is the <em>mode</em>. The function is explicit for when its value is different from cero, meaning we exclude the self-evident conditions for which it’s cero.</p>
+<p>Let’s start writing some code and see some plots of this distribution in action.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="triangular-distribution.html#cb1-1"></a>triangular.distribution &lt;-<span class="st"> </span><span class="cf">function</span>(x, L, U, M) {</span>
+<span id="cb1-2"><a href="triangular-distribution.html#cb1-2"></a>  <span class="cf">if</span> (x <span class="op">&lt;</span><span class="st"> </span>L) {</span>
+<span id="cb1-3"><a href="triangular-distribution.html#cb1-3"></a>    result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb1-4"><a href="triangular-distribution.html#cb1-4"></a>  } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">&lt;</span><span class="st"> </span>M) {</span>
+<span id="cb1-5"><a href="triangular-distribution.html#cb1-5"></a>    result &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(x <span class="op">-</span><span class="st"> </span>L) <span class="op">/</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span>L))</span>
+<span id="cb1-6"><a href="triangular-distribution.html#cb1-6"></a>  } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">==</span><span class="st"> </span>M) {</span>
+<span id="cb1-7"><a href="triangular-distribution.html#cb1-7"></a>    result &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>L)</span>
+<span id="cb1-8"><a href="triangular-distribution.html#cb1-8"></a>  } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">&lt;=</span><span class="st"> </span>U) {</span>
+<span id="cb1-9"><a href="triangular-distribution.html#cb1-9"></a>    result &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>x) <span class="op">/</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>M))</span>
+<span id="cb1-10"><a href="triangular-distribution.html#cb1-10"></a>  } <span class="cf">else</span> <span class="cf">if</span> (U <span class="op">&lt;</span><span class="st"> </span>x) {</span>
+<span id="cb1-11"><a href="triangular-distribution.html#cb1-11"></a>    result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb1-12"><a href="triangular-distribution.html#cb1-12"></a>  }</span>
+<span id="cb1-13"><a href="triangular-distribution.html#cb1-13"></a>  <span class="kw">return</span>(result)</span>
+<span id="cb1-14"><a href="triangular-distribution.html#cb1-14"></a>}</span></code></pre></div>
+<p>This function takes some <code>x</code> and evaluates the triangular PDF defined by <span class="math inline">\(L\)</span>, <span class="math inline">\(U\)</span>, and <span class="math inline">\(M\)</span> on it.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="triangular-distribution.html#cb2-1"></a>triangular.distribution.vectorized &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</span>
+<span id="cb2-2"><a href="triangular-distribution.html#cb2-2"></a>    <span class="kw">sapply</span>(x, triangular.distribution, ...)</span>
+<span id="cb2-3"><a href="triangular-distribution.html#cb2-3"></a>}</span></code></pre></div>
+<p>Because of the nature of the <code>plot.function()</code> method, we must make our function compatible with vectors, meaning that passing a vector as its <code>x</code> parameter would apply the function to every element in it. Notice the <code>...</code>. This just means that any subsequent parameters get passed to the underlying <code>triangular.distribution()</code> function.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="triangular-distribution.html#cb3-1"></a><span class="kw">plot.function</span>(</span>
+<span id="cb3-2"><a href="triangular-distribution.html#cb3-2"></a>  <span class="cf">function</span>(x) {<span class="kw">triangular.distribution.vectorized</span>(x, <span class="dv">2</span>, <span class="dv">9</span>, <span class="dv">7</span>)},</span>
+<span id="cb3-3"><a href="triangular-distribution.html#cb3-3"></a>  <span class="dt">from =</span> <span class="dv">2</span>,</span>
+<span id="cb3-4"><a href="triangular-distribution.html#cb3-4"></a>  <span class="dt">to =</span> <span class="dv">9</span>,</span>
+<span id="cb3-5"><a href="triangular-distribution.html#cb3-5"></a>  <span class="dt">main =</span> <span class="st">&quot;Triangular Distributions&quot;</span>,</span>
+<span id="cb3-6"><a href="triangular-distribution.html#cb3-6"></a>  <span class="dt">ylab =</span> <span class="st">&quot;f(x)&quot;</span>,</span>
+<span id="cb3-7"><a href="triangular-distribution.html#cb3-7"></a>  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>)</span>
+<span id="cb3-8"><a href="triangular-distribution.html#cb3-8"></a>)</span>
+<span id="cb3-9"><a href="triangular-distribution.html#cb3-9"></a></span>
+<span id="cb3-10"><a href="triangular-distribution.html#cb3-10"></a><span class="co">## Additional plots get included in the first rather than into a new canvas</span></span>
+<span id="cb3-11"><a href="triangular-distribution.html#cb3-11"></a><span class="co">## when the `add` parameter is set to TRUE.</span></span>
+<span id="cb3-12"><a href="triangular-distribution.html#cb3-12"></a><span class="kw">plot.function</span>(</span>
+<span id="cb3-13"><a href="triangular-distribution.html#cb3-13"></a>  <span class="cf">function</span>(x) {<span class="kw">triangular.distribution.vectorized</span>(x, <span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">7</span>)},</span>
+<span id="cb3-14"><a href="triangular-distribution.html#cb3-14"></a>  <span class="dt">from =</span> <span class="dv">2</span>,</span>
+<span id="cb3-15"><a href="triangular-distribution.html#cb3-15"></a>  <span class="dt">to =</span> <span class="dv">9</span>,</span>
+<span id="cb3-16"><a href="triangular-distribution.html#cb3-16"></a>  <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb3-17"><a href="triangular-distribution.html#cb3-17"></a>  <span class="dt">add =</span> <span class="ot">TRUE</span></span>
+<span id="cb3-18"><a href="triangular-distribution.html#cb3-18"></a>)</span>
+<span id="cb3-19"><a href="triangular-distribution.html#cb3-19"></a></span>
+<span id="cb3-20"><a href="triangular-distribution.html#cb3-20"></a><span class="kw">plot.function</span>(</span>
+<span id="cb3-21"><a href="triangular-distribution.html#cb3-21"></a>  <span class="cf">function</span>(x) {<span class="kw">triangular.distribution.vectorized</span>(x, <span class="dv">2</span>, <span class="fl">8.5</span>, <span class="dv">2</span>)},</span>
+<span id="cb3-22"><a href="triangular-distribution.html#cb3-22"></a>  <span class="dt">from =</span> <span class="fl">1.9999999</span>,</span>
+<span id="cb3-23"><a href="triangular-distribution.html#cb3-23"></a>  <span class="dt">to =</span> <span class="dv">9</span>,</span>
+<span id="cb3-24"><a href="triangular-distribution.html#cb3-24"></a>  <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb3-25"><a href="triangular-distribution.html#cb3-25"></a>  <span class="dt">add =</span> <span class="ot">TRUE</span></span>
+<span id="cb3-26"><a href="triangular-distribution.html#cb3-26"></a>)</span>
+<span id="cb3-27"><a href="triangular-distribution.html#cb3-27"></a></span>
+<span id="cb3-28"><a href="triangular-distribution.html#cb3-28"></a><span class="co">## Let&#39;s also include a legend so we can distinguish all three distributions.</span></span>
+<span id="cb3-29"><a href="triangular-distribution.html#cb3-29"></a><span class="kw">legend</span>(</span>
+<span id="cb3-30"><a href="triangular-distribution.html#cb3-30"></a>  <span class="dt">x =</span> <span class="dv">2</span>,</span>
+<span id="cb3-31"><a href="triangular-distribution.html#cb3-31"></a>  <span class="dt">y =</span> <span class="fl">0.5</span>,</span>
+<span id="cb3-32"><a href="triangular-distribution.html#cb3-32"></a>  <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;Triang(2, 9, 7)&quot;</span>, <span class="st">&quot;Triang(3, 8, 7)&quot;</span>, <span class="st">&quot;Triang(2, 8.5, 2)&quot;</span>),</span>
+<span id="cb3-33"><a href="triangular-distribution.html#cb3-33"></a>  <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>),</span>
+<span id="cb3-34"><a href="triangular-distribution.html#cb3-34"></a>  <span class="dt">lty =</span> <span class="dv">1</span></span>
+<span id="cb3-35"><a href="triangular-distribution.html#cb3-35"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/triangular%20plots-1.png" width="672" /></p>
+<p>Notice how our distributions take the shape of a triangle when <span class="math inline">\(x\)</span> falls within the interval of <span class="math inline">\(L\)</span> and <span class="math inline">\(U\)</span> but is cero everywhere else.</p>
+</div>
+<div id="triangular-cdf" class="section level2">
+<h2><span class="header-section-number">2.3</span> Triangular CDF</h2>
+<p>The PDF alone won’t do us much good, considering how we still need to calculate probabilities somehow (remember, at any point the probability of a continuous random variable is 0).</p>
+<p>Let us define the CDF as the probability that our random variable <span class="math inline">\(X\)</span> is smaller than some value <span class="math inline">\(x\)</span>. Or in mathematical notation:</p>
+<p><span class="math display">\[
+  F(x) = P\left( X \leq x \right) = \int_{-\infty}^{x}f(t)dt = \int_{L}^{x}f(t)dt
+\]</span></p>
+<p>The PDF is defined by two continuous lines and so it follows that we could compute the integral from negative infinity to some <span class="math inline">\(x\)</span> to be:</p>
+<p><span class="math display">\[
+  F(x)=
+  \begin{cases}
+    \frac{(x-L)^{2}}{(U-L)(M-L)}\quad&amp;(L\leq x&lt;M)\\
+    1 - \frac{(U-x)^{2}}{(U-L)(U-M)}\quad&amp;(M\leq x\leq U)\\
+    1 \quad&amp; (U &lt; x)\\
+  \end{cases}
+\]</span></p>
+<p>We can now implement this in R in similar fashion to our PDF.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="triangular-distribution.html#cb4-1"></a>cumulative.triangular.distribution &lt;-<span class="st"> </span><span class="cf">function</span>(x, L, U, M) {</span>
+<span id="cb4-2"><a href="triangular-distribution.html#cb4-2"></a>  <span class="cf">if</span> (x <span class="op">&lt;</span><span class="st"> </span>L) {</span>
+<span id="cb4-3"><a href="triangular-distribution.html#cb4-3"></a>    result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb4-4"><a href="triangular-distribution.html#cb4-4"></a>  } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">&lt;=</span><span class="st"> </span>M) {</span>
+<span id="cb4-5"><a href="triangular-distribution.html#cb4-5"></a>    result &lt;-<span class="st"> </span>(x <span class="op">-</span><span class="st"> </span>L) <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span>L))</span>
+<span id="cb4-6"><a href="triangular-distribution.html#cb4-6"></a>  } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">&lt;</span><span class="st"> </span>U) {</span>
+<span id="cb4-7"><a href="triangular-distribution.html#cb4-7"></a>    result &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>x) <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>M))</span>
+<span id="cb4-8"><a href="triangular-distribution.html#cb4-8"></a>  } <span class="cf">else</span> <span class="cf">if</span> (U <span class="op">&lt;=</span><span class="st"> </span>x) {</span>
+<span id="cb4-9"><a href="triangular-distribution.html#cb4-9"></a>    result &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb4-10"><a href="triangular-distribution.html#cb4-10"></a>  }</span>
+<span id="cb4-11"><a href="triangular-distribution.html#cb4-11"></a>  <span class="kw">return</span>(result)</span>
+<span id="cb4-12"><a href="triangular-distribution.html#cb4-12"></a>}</span>
+<span id="cb4-13"><a href="triangular-distribution.html#cb4-13"></a></span>
+<span id="cb4-14"><a href="triangular-distribution.html#cb4-14"></a>cumulative.triangular.distribution.vectorized &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</span>
+<span id="cb4-15"><a href="triangular-distribution.html#cb4-15"></a>    <span class="kw">sapply</span>(x, cumulative.triangular.distribution, ...)</span>
+<span id="cb4-16"><a href="triangular-distribution.html#cb4-16"></a>}</span></code></pre></div>
+<p>The code for the plots also shouldn’t change much. No change has been made to the parameters of each distribution.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="triangular-distribution.html#cb5-1"></a><span class="kw">plot.function</span>(</span>
+<span id="cb5-2"><a href="triangular-distribution.html#cb5-2"></a>  <span class="cf">function</span>(x) {<span class="kw">cumulative.triangular.distribution.vectorized</span>(x, <span class="dv">2</span>, <span class="dv">9</span>, <span class="dv">7</span>)},</span>
+<span id="cb5-3"><a href="triangular-distribution.html#cb5-3"></a>  <span class="dt">from =</span> <span class="dv">0</span>,</span>
+<span id="cb5-4"><a href="triangular-distribution.html#cb5-4"></a>  <span class="dt">to =</span> <span class="dv">10</span>,</span>
+<span id="cb5-5"><a href="triangular-distribution.html#cb5-5"></a>  <span class="dt">main =</span> <span class="st">&quot;Cumulative Triangular Distributions&quot;</span>,</span>
+<span id="cb5-6"><a href="triangular-distribution.html#cb5-6"></a>  <span class="dt">ylab =</span> <span class="st">&quot;F(x)&quot;</span>,</span>
+<span id="cb5-7"><a href="triangular-distribution.html#cb5-7"></a>  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb5-8"><a href="triangular-distribution.html#cb5-8"></a>)</span>
+<span id="cb5-9"><a href="triangular-distribution.html#cb5-9"></a></span>
+<span id="cb5-10"><a href="triangular-distribution.html#cb5-10"></a><span class="kw">plot.function</span>(</span>
+<span id="cb5-11"><a href="triangular-distribution.html#cb5-11"></a>  <span class="cf">function</span>(x) {<span class="kw">cumulative.triangular.distribution.vectorized</span>(x, <span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">7</span>)},</span>
+<span id="cb5-12"><a href="triangular-distribution.html#cb5-12"></a>  <span class="dt">from =</span> <span class="dv">0</span>,</span>
+<span id="cb5-13"><a href="triangular-distribution.html#cb5-13"></a>  <span class="dt">to =</span> <span class="dv">10</span>,</span>
+<span id="cb5-14"><a href="triangular-distribution.html#cb5-14"></a>  <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb5-15"><a href="triangular-distribution.html#cb5-15"></a>  <span class="dt">add =</span> <span class="ot">TRUE</span></span>
+<span id="cb5-16"><a href="triangular-distribution.html#cb5-16"></a>)</span>
+<span id="cb5-17"><a href="triangular-distribution.html#cb5-17"></a></span>
+<span id="cb5-18"><a href="triangular-distribution.html#cb5-18"></a><span class="kw">plot.function</span>(</span>
+<span id="cb5-19"><a href="triangular-distribution.html#cb5-19"></a>  <span class="cf">function</span>(x) {<span class="kw">cumulative.triangular.distribution.vectorized</span>(x, <span class="dv">2</span>, <span class="fl">8.5</span>, <span class="dv">2</span>)},</span>
+<span id="cb5-20"><a href="triangular-distribution.html#cb5-20"></a>  <span class="dt">from =</span> <span class="dv">0</span>,</span>
+<span id="cb5-21"><a href="triangular-distribution.html#cb5-21"></a>  <span class="dt">to =</span> <span class="dv">10</span>,</span>
+<span id="cb5-22"><a href="triangular-distribution.html#cb5-22"></a>  <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb5-23"><a href="triangular-distribution.html#cb5-23"></a>  <span class="dt">add =</span> <span class="ot">TRUE</span></span>
+<span id="cb5-24"><a href="triangular-distribution.html#cb5-24"></a>)</span>
+<span id="cb5-25"><a href="triangular-distribution.html#cb5-25"></a></span>
+<span id="cb5-26"><a href="triangular-distribution.html#cb5-26"></a><span class="kw">legend</span>(</span>
+<span id="cb5-27"><a href="triangular-distribution.html#cb5-27"></a>  <span class="dt">x =</span> <span class="dv">0</span>,</span>
+<span id="cb5-28"><a href="triangular-distribution.html#cb5-28"></a>  <span class="dt">y =</span> <span class="dv">1</span>,</span>
+<span id="cb5-29"><a href="triangular-distribution.html#cb5-29"></a>  <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;F(x)|f(x)=Triang(2, 9, 7)&quot;</span>, <span class="st">&quot;F(x)|f(x)=Triang(3, 8, 7)&quot;</span>, <span class="st">&quot;F(x)|f(x)=Triang(2, 8.5, 2)&quot;</span>),</span>
+<span id="cb5-30"><a href="triangular-distribution.html#cb5-30"></a>  <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>),</span>
+<span id="cb5-31"><a href="triangular-distribution.html#cb5-31"></a>  <span class="dt">lty =</span> <span class="dv">1</span></span>
+<span id="cb5-32"><a href="triangular-distribution.html#cb5-32"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/triangular%20cdf%20plots-1.png" width="672" /></p>
+<p>Notice how the cumulative distribution approaches and becomes one very quickly. This makes sense considering that, because of the bounds of the domain of the triangular distribution, <span class="math inline">\(X\)</span> is guaranteed to be smaller than <span class="math inline">\(U\)</span>, at which point the probability is one.</p>
+</div>
+<div id="inverse-triangular-cdf" class="section level2">
+<h2><span class="header-section-number">2.4</span> Inverse Triangular CDF</h2>
+<p>What if we already had a probability in mind but wanted to find the matching <span class="math inline">\(x\)</span>? Well, in that case, we would need to calculate an inverse CDF. Given some probability <span class="math inline">\(p\)</span>, what <span class="math inline">\(x\)</span> delimits <span class="math inline">\(X\)</span> such that <span class="math inline">\(p\)</span> is <span class="math inline">\(P(X\leq x)\)</span>.</p>
+<p>Or in other words, find <span class="math inline">\(g\)</span> such that:</p>
+<p><span class="math display">\[
+  g(p) = F^{-1}(p) = F^{-1}(F(x)) = x
+\]</span></p>
+<p>The proceure for finding the inverse of an equation of a parabola is very straight forward. The following is the inverse CDF of the triangular distribution.</p>
+<p><span class="math display">\[
+  F^{-1}(p) =
+  \begin{cases}
+    L + \sqrt{(M-L)(U-L)p} \quad&amp; (0 \leq p &lt; \frac{M-L}{U-L})\\
+    U - \sqrt{(U-L)(U-M)(1-p)} \quad&amp; (1 \geq p \geq \frac{M-L}{U-L})\\
+  \end{cases}
+\]</span></p>
+<p>No plots for this one considering how it just mirrors the regular CDF over the <span class="math inline">\(y=x\)</span> line.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="triangular-distribution.html#cb6-1"></a>inverse.cumulative.triangular.distribution &lt;-<span class="st"> </span><span class="cf">function</span>(p, L, U, M) {</span>
+<span id="cb6-2"><a href="triangular-distribution.html#cb6-2"></a>  <span class="cf">if</span> (p <span class="op">&lt;</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span>L) <span class="op">/</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>L)) {</span>
+<span id="cb6-3"><a href="triangular-distribution.html#cb6-3"></a>    result &lt;-<span class="st"> </span>L <span class="op">+</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">max</span>(<span class="dv">0</span>, (M <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>p))</span>
+<span id="cb6-4"><a href="triangular-distribution.html#cb6-4"></a>  } <span class="cf">else</span> <span class="cf">if</span> (p <span class="op">&gt;=</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span>L) <span class="op">/</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>L)) {</span>
+<span id="cb6-5"><a href="triangular-distribution.html#cb6-5"></a>    result &lt;-<span class="st"> </span>U <span class="op">-</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">max</span>(<span class="dv">0</span>, (U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>M) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p)))</span>
+<span id="cb6-6"><a href="triangular-distribution.html#cb6-6"></a>  }</span>
+<span id="cb6-7"><a href="triangular-distribution.html#cb6-7"></a>  <span class="kw">return</span>(result)</span>
+<span id="cb6-8"><a href="triangular-distribution.html#cb6-8"></a>}</span></code></pre></div>
+<p>Notice how we artificially coerce anything within the square root to be positive, with <code>max(0, (M - L) * (U - L) * p)</code> for example. We do this because small rounding errors can cause issues by approximating positive values close to cero or exactly cero to a negative number whereas the square root operator is only defined for positive real numbers (Ignore complex and imaginary numbers for now).</p>
+</div>
+<div id="measures-of-central-tendency-and-spread" class="section level2">
+<h2><span class="header-section-number">2.5</span> Measures of Central Tendency and Spread</h2>
+<p>These descriptive statistics can easily be derived from the PDF and CDF. We’ll spare you the math, but keep the following in mind for their implementation in R.</p>
+<div id="mean" class="section level3">
+<h3><span class="header-section-number">2.5.1</span> Mean</h3>
+<p>The expected value of a random variable <span class="math inline">\(X\)</span>.</p>
+<p><span class="math display">\[
+  E(X) = \mu = \int_{-\infty}^{\infty}xf(x)dx = \int_{L}^{U}xf(x)dx = \frac{L+U+M}{3}
+\]</span></p>
+</div>
+<div id="median" class="section level3">
+<h3><span class="header-section-number">2.5.2</span> Median</h3>
+<p>Value <span class="math inline">\(x\)</span> such that the probability that a random variable <span class="math inline">\(X\)</span> be smaller is 0.5.</p>
+<p><span class="math display">\[
+  \text{Median(X)} = F^{-1}(0.5) =
+  \begin{cases}
+    L + \sqrt{\frac{(U-L)(M-L)}{2}} \quad&amp; (M \geq \frac{L+U}{2})\\
+    U - \sqrt{\frac{(U-L)(U-M)}{2}} \quad&amp; (M \leq \frac{L+U}{2})\\
+  \end{cases}
+\]</span></p>
+</div>
+<div id="mode" class="section level3">
+<h3><span class="header-section-number">2.5.3</span> Mode</h3>
+<p>Value of a random variable <span class="math inline">\(X\)</span> for which <span class="math inline">\(f(x)\)</span> is at its maximum.</p>
+<p><span class="math display">\[
+  \text{Mode(X)} = M
+\]</span></p>
+</div>
+<div id="variance" class="section level3">
+<h3><span class="header-section-number">2.5.4</span> Variance</h3>
+<p>Measure of spread of the distribution with respect to the mean.</p>
+<p><span class="math display">\[
+  \text{Var(X)} = \sigma^{2} = \int_{-\infty}^{\infty}x^{2}f(x)dx - \mu^{2} = \int_{L}^{U}x^{2}f(x)dx - \mu^{2} = \frac{L^{2} + U^{2} + M^{2} - LU - LM - UM}{18}
+\]</span></p>
+</div>
+</div>
+<div id="an-object-to-hold-these-properties" class="section level2">
+<h2><span class="header-section-number">2.6</span> An Object to Hold These Properties</h2>
+<p>Knowing how to compute these quintessential properties of the trinagular distribution, it would make sense to build them into an object to be called on demand. Luckily, all we need is a constructor function that implements these procedures and computations and returns them in a variable that can hold multiple items of different class (a list). Consider the following constructor function that, when called, stores all explored functions and values into a list and returns it.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="triangular-distribution.html#cb7-1"></a><span class="co">## Returns a function that returns a list with each of its elements defined as functions or vectors of one</span></span>
+<span id="cb7-2"><a href="triangular-distribution.html#cb7-2"></a><span class="co">## element that describe aspects of a triangular distribution</span></span>
+<span id="cb7-3"><a href="triangular-distribution.html#cb7-3"></a><span class="co">## (pdf, cdf, inverse cdf, mean, median, mode, upper bound, lower bound, variance)</span></span>
+<span id="cb7-4"><a href="triangular-distribution.html#cb7-4"></a>generate.triangular &lt;-<span class="st"> </span><span class="cf">function</span>(L, U, M) {</span>
+<span id="cb7-5"><a href="triangular-distribution.html#cb7-5"></a>  </span>
+<span id="cb7-6"><a href="triangular-distribution.html#cb7-6"></a>  <span class="co">## Create a function that returns the pdf of the triangular, given some x.</span></span>
+<span id="cb7-7"><a href="triangular-distribution.html#cb7-7"></a>  pdf &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb7-8"><a href="triangular-distribution.html#cb7-8"></a>    <span class="cf">if</span> (x <span class="op">&lt;</span><span class="st"> </span>L) {</span>
+<span id="cb7-9"><a href="triangular-distribution.html#cb7-9"></a>      result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb7-10"><a href="triangular-distribution.html#cb7-10"></a>    } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">&lt;</span><span class="st"> </span>M) {</span>
+<span id="cb7-11"><a href="triangular-distribution.html#cb7-11"></a>      result &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(x <span class="op">-</span><span class="st"> </span>L) <span class="op">/</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span>L))</span>
+<span id="cb7-12"><a href="triangular-distribution.html#cb7-12"></a>    } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">==</span><span class="st"> </span>M) {</span>
+<span id="cb7-13"><a href="triangular-distribution.html#cb7-13"></a>      result &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>L)</span>
+<span id="cb7-14"><a href="triangular-distribution.html#cb7-14"></a>    } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">&lt;=</span><span class="st"> </span>U) {</span>
+<span id="cb7-15"><a href="triangular-distribution.html#cb7-15"></a>      result &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>x) <span class="op">/</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>M))</span>
+<span id="cb7-16"><a href="triangular-distribution.html#cb7-16"></a>    } <span class="cf">else</span> <span class="cf">if</span> (U <span class="op">&lt;</span><span class="st"> </span>x) {</span>
+<span id="cb7-17"><a href="triangular-distribution.html#cb7-17"></a>      result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb7-18"><a href="triangular-distribution.html#cb7-18"></a>    }</span>
+<span id="cb7-19"><a href="triangular-distribution.html#cb7-19"></a>    <span class="kw">return</span>(result)</span>
+<span id="cb7-20"><a href="triangular-distribution.html#cb7-20"></a>  }</span>
+<span id="cb7-21"><a href="triangular-distribution.html#cb7-21"></a>  </span>
+<span id="cb7-22"><a href="triangular-distribution.html#cb7-22"></a>  <span class="co">## Create a function that returns the cdf of the triangular, given some x.</span></span>
+<span id="cb7-23"><a href="triangular-distribution.html#cb7-23"></a>  cdf &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb7-24"><a href="triangular-distribution.html#cb7-24"></a>    <span class="cf">if</span> (x <span class="op">&lt;=</span><span class="st"> </span>L) {</span>
+<span id="cb7-25"><a href="triangular-distribution.html#cb7-25"></a>      result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb7-26"><a href="triangular-distribution.html#cb7-26"></a>    } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">&lt;=</span><span class="st"> </span>M) {</span>
+<span id="cb7-27"><a href="triangular-distribution.html#cb7-27"></a>      result &lt;-<span class="st"> </span>((x <span class="op">-</span><span class="st"> </span>L) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span>L))</span>
+<span id="cb7-28"><a href="triangular-distribution.html#cb7-28"></a>    } <span class="cf">else</span> <span class="cf">if</span> (x <span class="op">&lt;</span><span class="st"> </span>U) {</span>
+<span id="cb7-29"><a href="triangular-distribution.html#cb7-29"></a>      result &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>x) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>((U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>M))</span>
+<span id="cb7-30"><a href="triangular-distribution.html#cb7-30"></a>    } <span class="cf">else</span> <span class="cf">if</span> (U <span class="op">&lt;=</span><span class="st"> </span>x) {</span>
+<span id="cb7-31"><a href="triangular-distribution.html#cb7-31"></a>      result &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb7-32"><a href="triangular-distribution.html#cb7-32"></a>    }</span>
+<span id="cb7-33"><a href="triangular-distribution.html#cb7-33"></a>    <span class="kw">return</span>(result)</span>
+<span id="cb7-34"><a href="triangular-distribution.html#cb7-34"></a>  }</span>
+<span id="cb7-35"><a href="triangular-distribution.html#cb7-35"></a>  </span>
+<span id="cb7-36"><a href="triangular-distribution.html#cb7-36"></a>  <span class="co">## Create a function that returns the inverse cdf of the triangular, given some probability p.</span></span>
+<span id="cb7-37"><a href="triangular-distribution.html#cb7-37"></a>  inverse.cdf &lt;-<span class="st"> </span><span class="cf">function</span>(p) {</span>
+<span id="cb7-38"><a href="triangular-distribution.html#cb7-38"></a>    <span class="cf">if</span> (p <span class="op">&lt;</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span>L) <span class="op">/</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>L)) {</span>
+<span id="cb7-39"><a href="triangular-distribution.html#cb7-39"></a>      result &lt;-<span class="st"> </span>L <span class="op">+</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">max</span>(<span class="dv">0</span>, (M <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>p))</span>
+<span id="cb7-40"><a href="triangular-distribution.html#cb7-40"></a>    } <span class="cf">else</span> <span class="cf">if</span> (p <span class="op">&gt;=</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span>L) <span class="op">/</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>L)) {</span>
+<span id="cb7-41"><a href="triangular-distribution.html#cb7-41"></a>      result &lt;-<span class="st"> </span>U <span class="op">-</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">max</span>(<span class="dv">0</span>, (U <span class="op">-</span><span class="st"> </span>L) <span class="op">*</span><span class="st"> </span>(U <span class="op">-</span><span class="st"> </span>M) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p)))</span>
+<span id="cb7-42"><a href="triangular-distribution.html#cb7-42"></a>    }</span>
+<span id="cb7-43"><a href="triangular-distribution.html#cb7-43"></a>    <span class="kw">return</span>(result)</span>
+<span id="cb7-44"><a href="triangular-distribution.html#cb7-44"></a>  }</span>
+<span id="cb7-45"><a href="triangular-distribution.html#cb7-45"></a>  </span>
+<span id="cb7-46"><a href="triangular-distribution.html#cb7-46"></a>  <span class="co">## Create a vector of length 1 that describes the mean of the distribution</span></span>
+<span id="cb7-47"><a href="triangular-distribution.html#cb7-47"></a>  tri.mean &lt;-<span class="st"> </span>(L <span class="op">+</span><span class="st"> </span>U <span class="op">+</span><span class="st"> </span>M) <span class="op">/</span><span class="st"> </span><span class="dv">3</span></span>
+<span id="cb7-48"><a href="triangular-distribution.html#cb7-48"></a>  </span>
+<span id="cb7-49"><a href="triangular-distribution.html#cb7-49"></a>  <span class="co">## Create a vector of length 1 that describes the median of the distribution</span></span>
+<span id="cb7-50"><a href="triangular-distribution.html#cb7-50"></a>  tri.median &lt;-<span class="st"> </span><span class="kw">inverse.cdf</span>(<span class="fl">0.5</span>)</span>
+<span id="cb7-51"><a href="triangular-distribution.html#cb7-51"></a>  </span>
+<span id="cb7-52"><a href="triangular-distribution.html#cb7-52"></a>  <span class="co">## Create a vector of length 1 that describes the mode of the distribution</span></span>
+<span id="cb7-53"><a href="triangular-distribution.html#cb7-53"></a>  tri.mode &lt;-<span class="st"> </span>M</span>
+<span id="cb7-54"><a href="triangular-distribution.html#cb7-54"></a>  </span>
+<span id="cb7-55"><a href="triangular-distribution.html#cb7-55"></a>  <span class="co">## Create a vector of length 1 that describes the upper bound of the distribution&#39;s domain</span></span>
+<span id="cb7-56"><a href="triangular-distribution.html#cb7-56"></a>  tri.upper &lt;-<span class="st"> </span>U</span>
+<span id="cb7-57"><a href="triangular-distribution.html#cb7-57"></a>  </span>
+<span id="cb7-58"><a href="triangular-distribution.html#cb7-58"></a>  <span class="co">## Create a vector of length 1 that describes the lower bound of the distribution&#39;s domain</span></span>
+<span id="cb7-59"><a href="triangular-distribution.html#cb7-59"></a>  tri.lower &lt;-<span class="st"> </span>L</span>
+<span id="cb7-60"><a href="triangular-distribution.html#cb7-60"></a>  </span>
+<span id="cb7-61"><a href="triangular-distribution.html#cb7-61"></a>  <span class="co">## Create a vector of length 1 that describes the variance of the distribution</span></span>
+<span id="cb7-62"><a href="triangular-distribution.html#cb7-62"></a>  tri.var &lt;-</span>
+<span id="cb7-63"><a href="triangular-distribution.html#cb7-63"></a><span class="st">    </span>((L <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(U <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(M <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span>L <span class="op">*</span><span class="st"> </span>U <span class="op">-</span><span class="st"> </span>L <span class="op">*</span><span class="st"> </span>M <span class="op">-</span><span class="st"> </span>U <span class="op">*</span><span class="st"> </span>M) <span class="op">/</span><span class="st"> </span><span class="dv">18</span></span>
+<span id="cb7-64"><a href="triangular-distribution.html#cb7-64"></a>  </span>
+<span id="cb7-65"><a href="triangular-distribution.html#cb7-65"></a>  <span class="co">## Build the list and return it. This list contains all major properties of the triangular distribution</span></span>
+<span id="cb7-66"><a href="triangular-distribution.html#cb7-66"></a>  <span class="kw">return</span>(</span>
+<span id="cb7-67"><a href="triangular-distribution.html#cb7-67"></a>    <span class="kw">list</span>(</span>
+<span id="cb7-68"><a href="triangular-distribution.html#cb7-68"></a>      <span class="dt">pdf =</span> pdf,</span>
+<span id="cb7-69"><a href="triangular-distribution.html#cb7-69"></a>      <span class="dt">cdf =</span> cdf,</span>
+<span id="cb7-70"><a href="triangular-distribution.html#cb7-70"></a>      <span class="dt">inverse.cdf =</span> inverse.cdf,</span>
+<span id="cb7-71"><a href="triangular-distribution.html#cb7-71"></a>      <span class="dt">tri.mean =</span> tri.mean,</span>
+<span id="cb7-72"><a href="triangular-distribution.html#cb7-72"></a>      <span class="dt">tri.median =</span> tri.median,</span>
+<span id="cb7-73"><a href="triangular-distribution.html#cb7-73"></a>      <span class="dt">tri.mode =</span> tri.mode,</span>
+<span id="cb7-74"><a href="triangular-distribution.html#cb7-74"></a>      <span class="dt">tri.upper =</span> tri.upper,</span>
+<span id="cb7-75"><a href="triangular-distribution.html#cb7-75"></a>      <span class="dt">tri.lower =</span> tri.lower,</span>
+<span id="cb7-76"><a href="triangular-distribution.html#cb7-76"></a>      <span class="dt">tri.var =</span> tri.var</span>
+<span id="cb7-77"><a href="triangular-distribution.html#cb7-77"></a>    )</span>
+<span id="cb7-78"><a href="triangular-distribution.html#cb7-78"></a>  )</span>
+<span id="cb7-79"><a href="triangular-distribution.html#cb7-79"></a>}</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="truncated-triangular-distribution.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
