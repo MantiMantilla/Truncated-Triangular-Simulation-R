@@ -211,7 +211,7 @@ generate.triangular <- function(L, U, M) {
 }
 ```
 
-# Simulation and Validation.
+# Simulation
 
 So far we have designed two constructor functions, `generate.triangular()` and `generate.truncated.triangular()`, with which we may create triangular distributions and truncated triangular distributions respectively. Let's move one to some code the actually does something. Say, for example, that the truncated triangular distribution is how you chose for a random variable to behave, how long it takes for a crop to grow or the amount of rain water of a particular time period. Being able to randomly sample instances of this variable without having to wait for rainfall or for crops to grow and study how a larger system behaves as a function of this random variable could be highly beneficial and is, in fact, the basis of Monte Carlo simulation.
 
@@ -397,6 +397,6 @@ plot.function(
 )
 ```
 
-Once again, the distribution closely ressembles the sampled data. Next, we will look into testing the hypotheis that the sample matches the distribution.
+Once again, the distribution closely ressembles the sampled data. Next, we will look into testing the hypothesis that the sample matches the distribution.
 
 Whichever method is fine for simulating or sampling PDFs, but know that each has its benefits. You would use the inverse CDF ideally on all scenarios as it is easy to implement, given an inverse CDF, but if such is not available to you or there is no interest in deriving one, the slower simulation by trial and error would still prove reliable.
