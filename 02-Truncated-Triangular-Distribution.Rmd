@@ -1,6 +1,6 @@
 # Truncated Triangular Distribution
 
-```{r triangular class, include=FALSE}
+```{r triangular class truncated distribution, include=FALSE}
 ## Returns a function that returns a list with each of its elements defined as functions or vectors of one
 ## element that describe aspects of a triangular distribution
 ## (pdf, cdf, inverse cdf, mean, median, mode, upper bound, lower bound, variance)
@@ -84,7 +84,7 @@ generate.triangular <- function(L, U, M) {
 
 ## Truncated Distribution
 
-A truncated distribution, simply put, is a distribution derived from another such that it's domain is restricted to some interval $(a,b]$. The function itself might not change but because we require the area under the PDF to be equal to 1, a transformation is due. One of the strengths of this distribution lies in the fact that most of it properties can be calculated from methods already implemented in the underlying distribution, meaning that the functions and values need not be derived analytically and so it's implementation is easily generalized.
+A truncated distribution, simply put, is a distribution derived from another such that it's domain is restricted to some interval $]a,b]$. The function itself might not change but because we require the area under the PDF to be equal to 1, a transformation is due. One of the strengths of this distribution lies in the fact that most of it properties can be calculated from methods already implemented in the underlying distribution, meaning that the functions and values need not be derived analytically and so it's implementation is easily generalized.
 
 ## Truncated Triangular PDF
 
@@ -254,7 +254,7 @@ What if we already had a probability in mind but wanted to find the matching $x$
 Or in other words, find $g$ such that:
 
 $$
-  g(p) = F^{-1}(p) = F^{-1}(F(x)) = x
+  g(p) = H^{-1}(p) = H^{-1}(H(x)) = x
 $$
 
 Explicitly, we really just need to solve for $x$ in the following equation.

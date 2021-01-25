@@ -1,4 +1,4 @@
-## Import relevant functions to generate triangular and truncated triangular distributions with cached properties (created as a list).
+## Import relevant functions to generate triangular and truncated triangular distributions with cached properties (created as a list)
 source(file.path("Scripts", "Generate-Triangular.R"))
 source(file.path("Scripts", "Generate-Truncated-Triangular.R"))
 
@@ -70,14 +70,11 @@ while (success.count < 10000) {
   }
 }
 
-## Simulate 1000 instances of a random variable with f(x) = truncated triangular by inverse cdf method (faster than by trial and error).
-vec2 <- rep(0, 10000)
+## Simulate 10000 instances of a random variable with f(x) = truncated triangular by inverse cdf method (faster than by trial and error)
 rand.unif <- runif(10000, min = 0, max = 1)
-for (i in 1:10000) {
-  val <- my.trun.tri.dist$inverse.cdf(rand.unif[i])
-  vec2[i] <- val
-}
+vec2 <- sapply(rand.unif, my.trun.tri.dist$inverse.cdf)
 
+## Make the truncated PDF compatible with vectors for plotting
 trun.vector.pdf <- function(x) {
   sapply(x, FUN = my.trun.tri.dist$pdf)
 }
@@ -87,6 +84,7 @@ hist(vec,
      xlab = "x",
      breaks = (my.trun.tri.dist$trun.tri.upper - my.trun.tri.dist$trun.tri.lower) * 10,
      freq = FALSE)
+
 curve(
   trun.vector.pdf,
   from = 2.99999,

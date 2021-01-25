@@ -38,3 +38,7 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 .Rproj.user
+
+# Book build files
+_book/*
+_bookdown_files/*

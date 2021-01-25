@@ -1,0 +1,23 @@
+# Validation
+
+To validate our claims that both vectors create samples that match the truncated triangular distribution, a few hypothesis tests are in order.
+
+First, we validate that the sample mean and the distribution mean match; second, we evaluate whether their variance matches. If both these tests are passed, we perform a goodness of fit test. Specifically, a _Kolmogorov-Smirnof_ test and a _Chi-Square test_.
+
+<!-- TODO: Populate following parts with content from discrete event simulation course -->
+
+## Hypothesis test for Mean
+
+
+
+## Hypothesis test for Variance
+
+
+
+## Kolmogorov-Smirnov Test
+
+
+
+## Chi-Square Test
+
+
