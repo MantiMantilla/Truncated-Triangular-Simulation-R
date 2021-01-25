@@ -28,7 +28,7 @@ median-1
 mode-1
 variance-1
 an-object-to-hold-these-properties-1
-simulation-and-validation.
+simulation
 uniform-distribution
 pseudo-random-uniform-numbers
 pseudo-random-variables
