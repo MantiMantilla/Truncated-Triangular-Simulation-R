@@ -24,7 +24,7 @@
 <meta name="author" content="Alejandro Mantilla" />
 
 
-<meta name="date" content="2021-01-22" />
+<meta name="date" content="2021-01-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="truncated-triangular-distribution.html"/>
-
+<link rel="next" href="validation.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -166,8 +166,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.6" data-path="truncated-triangular-distribution.html"><a href="truncated-triangular-distribution.html#an-object-to-hold-these-properties-1"><i class="fa fa-check"></i><b>3.6</b> An Object to Hold These Properties</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html"><i class="fa fa-check"></i><b>4</b> Simulation and Validation.</a><ul>
-<li class="chapter" data-level="4.1" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#r-markdown"><i class="fa fa-check"></i><b>4.1</b> R Markdown</a></li>
-<li class="chapter" data-level="4.2" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#including-plots"><i class="fa fa-check"></i><b>4.2</b> Including Plots</a></li>
+<li class="chapter" data-level="4.1" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#uniform-distribution"><i class="fa fa-check"></i><b>4.1</b> Uniform Distribution</a></li>
+<li class="chapter" data-level="4.2" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#pseudo-random-uniform-numbers"><i class="fa fa-check"></i><b>4.2</b> Pseudo-random Uniform Numbers</a></li>
+<li class="chapter" data-level="4.3" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#pseudo-random-variables"><i class="fa fa-check"></i><b>4.3</b> Pseudo-Random Variables</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#inverse-cdf-method"><i class="fa fa-check"></i><b>4.3.1</b> Inverse CDF Method</a></li>
+<li class="chapter" data-level="4.3.2" data-path="simulation-and-validation-.html"><a href="simulation-and-validation-.html#trial-and-error"><i class="fa fa-check"></i><b>4.3.2</b> Trial and Error</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="validation.html"><a href="validation.html"><i class="fa fa-check"></i><b>5</b> Validation</a><ul>
+<li class="chapter" data-level="5.1" data-path="validation.html"><a href="validation.html#hypothesis-test-for-mean"><i class="fa fa-check"></i><b>5.1</b> Hypothesis test for Mean</a></li>
+<li class="chapter" data-level="5.2" data-path="validation.html"><a href="validation.html#hypothesis-test-for-variance"><i class="fa fa-check"></i><b>5.2</b> Hypothesis test for Variance</a></li>
+<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3</b> Kolmogorov-Smirnov Test</a></li>
+<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.4</b> Chi-Square Test</a></li>
 </ul></li>
 </ul>
 
@@ -188,26 +198,155 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="simulation-and-validation." class="section level1">
 <h1><span class="header-section-number">4</span> Simulation and Validation.</h1>
-<p>So far we have designed two constructor functions, <code>generate.triangular()</code> and <code>generate.truncated.triangular()</code>, with which we may create triangular distributions and truncated triangular distributions respectively. We now may want to validate our implementation. An easy method to validate our functions that calculate descriptive statistics or the pdf is to use it as a means to generate a random sample</p>
-<div id="r-markdown" class="section level2">
-<h2><span class="header-section-number">4.1</span> R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="simulation-and-validation-.html#cb16-1"></a><span class="kw">summary</span>(cars)</span></code></pre></div>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<p>So far we have designed two constructor functions, <code>generate.triangular()</code> and <code>generate.truncated.triangular()</code>, with which we may create triangular distributions and truncated triangular distributions respectively. Let’s move one to some code the actually does something. Say, for example, that the truncated triangular distribution is how you chose for a random variable to behave, how long it takes for a crop to grow or the amount of rain water of a particular time period. Being able to randomly sample instances of this variable without having to wait for rainfall or for crops to grow and study how a larger system behaves as a function of this random variable could be highly beneficial and is, in fact, the basis of Monte Carlo simulation.</p>
+<p>Some definitions for this section:</p>
+<blockquote>
+<p>Let <span class="math inline">\(Z \sim f(x) = Triangular(2, 9, 7)\)</span> and <span class="math inline">\(Z&#39; \sim f(x|3 &lt; X \leq 8)=h(x)\)</span></p>
+</blockquote>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="simulation-and-validation-.html#cb16-1"></a><span class="co">## Set a seed so results are replicable</span></span>
+<span id="cb16-2"><a href="simulation-and-validation-.html#cb16-2"></a><span class="kw">set.seed</span>(<span class="dv">10</span>)</span>
+<span id="cb16-3"><a href="simulation-and-validation-.html#cb16-3"></a></span>
+<span id="cb16-4"><a href="simulation-and-validation-.html#cb16-4"></a><span class="co">## Create a list that contains the major properties of a triangular</span></span>
+<span id="cb16-5"><a href="simulation-and-validation-.html#cb16-5"></a><span class="co">## distribution with L = 2, U = 9, and M = 7</span></span>
+<span id="cb16-6"><a href="simulation-and-validation-.html#cb16-6"></a>my.tri.dist &lt;-<span class="st"> </span><span class="kw">generate.triangular</span>(<span class="dt">L =</span> <span class="dv">2</span>, <span class="dt">U =</span> <span class="dv">9</span>, <span class="dt">M =</span> <span class="dv">7</span>)</span>
+<span id="cb16-7"><a href="simulation-and-validation-.html#cb16-7"></a></span>
+<span id="cb16-8"><a href="simulation-and-validation-.html#cb16-8"></a><span class="co">## Create a list that contains the major properties of a truncated</span></span>
+<span id="cb16-9"><a href="simulation-and-validation-.html#cb16-9"></a><span class="co">## triangular distribution between a = 3 and b = 8, based on the</span></span>
+<span id="cb16-10"><a href="simulation-and-validation-.html#cb16-10"></a><span class="co">## previous triangular</span></span>
+<span id="cb16-11"><a href="simulation-and-validation-.html#cb16-11"></a>my.trun.tri.dist &lt;-</span>
+<span id="cb16-12"><a href="simulation-and-validation-.html#cb16-12"></a><span class="st">  </span><span class="kw">generate.truncated.triangular</span>(<span class="dt">a =</span> <span class="dv">3</span>,</span>
+<span id="cb16-13"><a href="simulation-and-validation-.html#cb16-13"></a>                                <span class="dt">b =</span> <span class="dv">8</span>,</span>
+<span id="cb16-14"><a href="simulation-and-validation-.html#cb16-14"></a>                                <span class="dt">orig.tri.dist =</span> my.tri.dist)</span></code></pre></div>
+<div id="uniform-distribution" class="section level2">
+<h2><span class="header-section-number">4.1</span> Uniform Distribution</h2>
+<p>This may well be the most simple continuous probability density function. The uniform distribution, describes a random variable that is equiprobable at all values within an interval. This means that given an interval <span class="math inline">\([a,b]\)</span>, a random variable <span class="math inline">\(X\)</span> can be any value greater than or equal to <span class="math inline">\(a\)</span> and smaller than or equal to <span class="math inline">\(b\)</span> with the same likelihood. Let’s express this mathematically!</p>
+<blockquote>
+<p>Let <span class="math inline">\(U \sim g(x)=Uniform(a,b)\)</span>, where</p>
+</blockquote>
+<p><span class="math display">\[
+  g(x) =
+  \begin{cases}
+    \frac{1}{b-a} \quad&amp; (a\leq x\leq b)\\
+    0 \quad&amp; (x\notin [a,b])
+  \end{cases}
+\]</span>
+No need to implement this programatically, it is a very simple distribution that we use inderectly when generating random numbers.</p>
 </div>
-<div id="including-plots" class="section level2">
-<h2><span class="header-section-number">4.2</span> Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="_main_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="pseudo-random-uniform-numbers" class="section level2">
+<h2><span class="header-section-number">4.2</span> Pseudo-random Uniform Numbers</h2>
+<p>We’ll concern ourselves with a method to simulate a uniform random variable, the <em>linear congruence method</em>. This is useful to generate numbers that follow a uniform distribution which we can then transform into any distribution. Know that it is not the most widespread method, but the most simple which will result in a reliable random rumber generator. Most software will use some implementation of the <em>Mersenne Twister</em> if you’re looking for further reading.</p>
+<p>It is not possible to produce a sequence of numbers that is truly random. If you knew the initial conditions of a system, with enough information you could perfectly predict it. Rather, pseudo-random number generators (RNGs) take some <em>seed</em> (<span class="math inline">\(X_{0}\)</span>) as its initial state and produces numbers from it following a deterministic procedure that is too difficult to reverse without knowing the seed. The seed is properly hidden from the target of the random numbers and so the system seems random, since they have no way to predict what the next condition will be. All following numbers are indexed as <span class="math inline">\(X_{1},X_{2},\cdots,X_{n}\)</span>. The general expression for the sequence is as follows:</p>
+<p><span class="math display">\[
+  X_{n+1} = (aX_{n}+c) \mod m.
+\]</span></p>
+<p>Where <span class="math inline">\(m\)</span> is usually a prime number, <span class="math inline">\(a\)</span> is some positive integer smaller than <span class="math inline">\(m\)</span>, and c is some integer in the interval <span class="math inline">\([0,m[\)</span>.</p>
+<p>The numbers in this sequence are not samples of a uniform random variable. The actual sequence of uniformly distributed random numbers, <span class="math inline">\(U_{n}\)</span>, is the following transform of the <span class="math inline">\(X_{n}\)</span> sequence.</p>
+<p><span class="math display">\[
+  U_{n}=\frac{X_{n}}{m}
+\]</span></p>
+<p><span class="math inline">\(U_{n}\)</span> is a sequence of uniformly distributed numbers on the interval <span class="math inline">\([0,1[\)</span>. If we wanted another sequence of random numbers, <span class="math inline">\(U&#39;_{n}\)</span> on some other interval, <span class="math inline">\([a,b[\)</span>, we would do the following transform.</p>
+<p><span class="math display">\[
+  U&#39;_{n}=U_{n} (b - a) + a
+\]</span></p>
+<p>Notice how when <span class="math inline">\(U_{n}\)</span> is very close to <span class="math inline">\(1\)</span>, <span class="math inline">\(U&#39;_{n}\)</span> comes very close to being <span class="math inline">\(b\)</span>, whereas when <span class="math inline">\(U_{n}\)</span> is <span class="math inline">\(0\)</span>, <span class="math inline">\(U&#39;_{n}\)</span> is just <span class="math inline">\(a\)</span>, and so we now have a random sample of numbers uniformly distributed on the interval <span class="math inline">\([a,b[\)</span>.</p>
+<p>We also won’t implement this procedure since most programming languages already have a function to produce uniformly distributed numbers on the interval <span class="math inline">\([0,1[\)</span>, though knowing how one may do so will come in handy. In R, this function is <code>runif()</code>.</p>
+<p>One last thing to note is that one should never return <span class="math inline">\(U_{0}\)</span> or <span class="math inline">\(U&#39;_{0}\)</span> as a random number, since a user with malicious intent could easily derive the seed from it.</p>
+</div>
+<div id="pseudo-random-variables" class="section level2">
+<h2><span class="header-section-number">4.3</span> Pseudo-Random Variables</h2>
+<p>Let us now consider two methods for generating samples of variables following arbitrary distributions off of a sequence of uniformly distributed random numbers, <span class="math inline">\(U_{n}\)</span>.</p>
+<div id="inverse-cdf-method" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Inverse CDF Method</h3>
+<p>You may have noticed already when studying the triangular CDF, but given a random variable <span class="math inline">\(Y\)</span> with PDF <span class="math inline">\(f(y)\)</span> and CDF <span class="math inline">\(F(y)\)</span>, the CDF produces a value on the interval <span class="math inline">\([0,1]\)</span>. The inverse CDF will also take a value on the interval <span class="math inline">\([0,1]\)</span> and assign it a <span class="math inline">\(y\)</span>.</p>
+<p>Mathematicaly,</p>
+<p><span class="math display">\[
+  F(y) = p \Rightarrow F^{-1}\left(F\left(y\right)\right)=F^{-1}\left(p\right) \Rightarrow y = F^{-1}\left(p\right).
+\]</span></p>
+<p>This means that given some value between 0 and 1, we can apply the inverse CDF to it and get a matching value, <span class="math inline">\(y\)</span>. If we do this to all elements in a random sample of values between 0 and 1 we can get a random sample of <span class="math inline">\(y\)</span>s that follow the PDF <span class="math inline">\(f(y)\)</span>. Let’s see this implemented in R</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="simulation-and-validation-.html#cb17-1"></a><span class="co">## 1. Generate a sequence of uniform random numbers on the interval [0, 1].</span></span>
+<span id="cb17-2"><a href="simulation-and-validation-.html#cb17-2"></a><span class="co">## 10000 should be enough.</span></span>
+<span id="cb17-3"><a href="simulation-and-validation-.html#cb17-3"></a>U &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10000</span>)</span>
+<span id="cb17-4"><a href="simulation-and-validation-.html#cb17-4"></a></span>
+<span id="cb17-5"><a href="simulation-and-validation-.html#cb17-5"></a><span class="co">## 2. Transform all elements of the U sequence with the inverse CDF</span></span>
+<span id="cb17-6"><a href="simulation-and-validation-.html#cb17-6"></a><span class="co">## of the truncated distribution</span></span>
+<span id="cb17-7"><a href="simulation-and-validation-.html#cb17-7"></a>simulated.Z.prime.Inv.CDF &lt;-<span class="st"> </span><span class="kw">sapply</span>(U, my.trun.tri.dist<span class="op">$</span>inverse.cdf)</span></code></pre></div>
+<p>The variable <code>simulated.Z.prime</code> holds a sequence of numbers that follow the truncated triangular distribution defined at the start of this section. Let’s plot a histogram of this sequence along with the curve of the pdf it should ressemble.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="simulation-and-validation-.html#cb18-1"></a><span class="co">## Plot and describe the first simulation with many bins</span></span>
+<span id="cb18-2"><a href="simulation-and-validation-.html#cb18-2"></a><span class="kw">hist</span>(simulated.Z.prime.Inv.CDF,</span>
+<span id="cb18-3"><a href="simulation-and-validation-.html#cb18-3"></a>     <span class="dt">xlab =</span> <span class="st">&quot;z&quot;</span>,</span>
+<span id="cb18-4"><a href="simulation-and-validation-.html#cb18-4"></a>     <span class="dt">breaks =</span> (my.trun.tri.dist<span class="op">$</span>trun.tri.upper <span class="op">-</span><span class="st"> </span>my.trun.tri.dist<span class="op">$</span>trun.tri.lower) <span class="op">*</span><span class="st"> </span><span class="dv">10</span>,</span>
+<span id="cb18-5"><a href="simulation-and-validation-.html#cb18-5"></a>     <span class="dt">freq =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb18-6"><a href="simulation-and-validation-.html#cb18-6"></a></span>
+<span id="cb18-7"><a href="simulation-and-validation-.html#cb18-7"></a><span class="kw">plot.function</span>(</span>
+<span id="cb18-8"><a href="simulation-and-validation-.html#cb18-8"></a>  <span class="cf">function</span>(z) {<span class="kw">sapply</span>(z, my.trun.tri.dist<span class="op">$</span>pdf)},</span>
+<span id="cb18-9"><a href="simulation-and-validation-.html#cb18-9"></a>  <span class="dt">from =</span> <span class="fl">2.99999</span>,</span>
+<span id="cb18-10"><a href="simulation-and-validation-.html#cb18-10"></a>  <span class="dt">to =</span> <span class="fl">8.0001</span>,</span>
+<span id="cb18-11"><a href="simulation-and-validation-.html#cb18-11"></a>  <span class="dt">n =</span> <span class="dv">100000</span>,</span>
+<span id="cb18-12"><a href="simulation-and-validation-.html#cb18-12"></a>  <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb18-13"><a href="simulation-and-validation-.html#cb18-13"></a>  <span class="dt">add =</span> <span class="ot">TRUE</span></span>
+<span id="cb18-14"><a href="simulation-and-validation-.html#cb18-14"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Plot%20Simulated%20Inverse%20CDF-1.png" width="672" /></p>
+<p>The truncated triangular PDF seems to closely fit the random sample. This is a good sign that our procedure is correct but is not enough to say for sure.</p>
+</div>
+<div id="trial-and-error" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> Trial and Error</h3>
+<p>An expression for the inverse CDF of a distribution is not always easy or possible to derive. If such is the case, we execute the following procedure. One weakness of this approach is it only works for random variables on a closed, finite interval, meaning that the likes of the normal and exponential distributions can’t be simulated reliably. Also, this is a slower approach because we can’t know how long it will take until we’ve sampled enough numbers from the distribution. Luckily, the truncated distribution requires that we simulate within an interval and the expected value of iterations until we reach the desired sample size is its minimum the way it is implemented in our code.</p>
+<ol style="list-style-type: decimal">
+<li><p>Find a constant function that is always greater than the PDF you are trying to simulate. The closer this constant is to being the max of the PDF the better.</p></li>
+<li><p>Take a uniform random number and transform it on the interval of the domain of your PDF.</p></li>
+<li><p>Take the next random uniform number, and transform it so it falls between 0 and the constant you found on step one.</p></li>
+<li><p>Evaluate if the transformed value in step three is less than or equal to the PDF evaluated on the transformed value from step two.</p></li>
+<li><p>If the condition in step four is met, add the transformed value from step 2 to your sample of the PDF.</p></li>
+<li><p>Repeat steps two through five until you have gathered your goal sample size.</p></li>
+</ol>
+<p>Let’s see this procedure implemented programatically.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="simulation-and-validation-.html#cb19-1"></a><span class="co">## Simulate 10000 instances of a random variable with f(x) = truncated triangular by trial and error.</span></span>
+<span id="cb19-2"><a href="simulation-and-validation-.html#cb19-2"></a>simulated.Z.prime.t.and.e &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">10000</span>)</span>
+<span id="cb19-3"><a href="simulation-and-validation-.html#cb19-3"></a>success.count &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb19-4"><a href="simulation-and-validation-.html#cb19-4"></a><span class="co">## Stop once we&#39;ve achieved 10000 succesful numbers</span></span>
+<span id="cb19-5"><a href="simulation-and-validation-.html#cb19-5"></a><span class="cf">while</span> (success.count <span class="op">&lt;</span><span class="st"> </span><span class="dv">10000</span>) {</span>
+<span id="cb19-6"><a href="simulation-and-validation-.html#cb19-6"></a>  <span class="co">## Step 2</span></span>
+<span id="cb19-7"><a href="simulation-and-validation-.html#cb19-7"></a>  u<span class="fl">.1</span> &lt;-</span>
+<span id="cb19-8"><a href="simulation-and-validation-.html#cb19-8"></a><span class="st">    </span><span class="kw">runif</span>(</span>
+<span id="cb19-9"><a href="simulation-and-validation-.html#cb19-9"></a>      <span class="dt">n =</span> <span class="dv">1</span>,</span>
+<span id="cb19-10"><a href="simulation-and-validation-.html#cb19-10"></a>      <span class="dt">min =</span> my.trun.tri.dist<span class="op">$</span>trun.tri.lower,</span>
+<span id="cb19-11"><a href="simulation-and-validation-.html#cb19-11"></a>      <span class="dt">max =</span> my.trun.tri.dist<span class="op">$</span>trun.tri.upper</span>
+<span id="cb19-12"><a href="simulation-and-validation-.html#cb19-12"></a>    )</span>
+<span id="cb19-13"><a href="simulation-and-validation-.html#cb19-13"></a>  <span class="co">## Step 3</span></span>
+<span id="cb19-14"><a href="simulation-and-validation-.html#cb19-14"></a>  u<span class="fl">.2</span> &lt;-</span>
+<span id="cb19-15"><a href="simulation-and-validation-.html#cb19-15"></a><span class="st">    </span><span class="kw">runif</span>(</span>
+<span id="cb19-16"><a href="simulation-and-validation-.html#cb19-16"></a>      <span class="dt">n =</span> <span class="dv">1</span>,</span>
+<span id="cb19-17"><a href="simulation-and-validation-.html#cb19-17"></a>      <span class="dt">min =</span> <span class="dv">0</span>,</span>
+<span id="cb19-18"><a href="simulation-and-validation-.html#cb19-18"></a>      <span class="dt">max =</span> my.trun.tri.dist<span class="op">$</span><span class="kw">pdf</span>(my.trun.tri.dist<span class="op">$</span>trun.tri.mode)</span>
+<span id="cb19-19"><a href="simulation-and-validation-.html#cb19-19"></a>    )</span>
+<span id="cb19-20"><a href="simulation-and-validation-.html#cb19-20"></a>  <span class="co">## Step 4</span></span>
+<span id="cb19-21"><a href="simulation-and-validation-.html#cb19-21"></a>  <span class="cf">if</span> (u<span class="fl">.2</span> <span class="op">&lt;=</span><span class="st"> </span>my.trun.tri.dist<span class="op">$</span><span class="kw">pdf</span>(u<span class="fl">.1</span>)) {</span>
+<span id="cb19-22"><a href="simulation-and-validation-.html#cb19-22"></a>    <span class="co"># Step 5</span></span>
+<span id="cb19-23"><a href="simulation-and-validation-.html#cb19-23"></a>    success.count &lt;-<span class="st"> </span>success.count <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb19-24"><a href="simulation-and-validation-.html#cb19-24"></a>    simulated.Z.prime.t.and.e[success.count] &lt;-<span class="st"> </span>u<span class="fl">.1</span></span>
+<span id="cb19-25"><a href="simulation-and-validation-.html#cb19-25"></a>  }</span>
+<span id="cb19-26"><a href="simulation-and-validation-.html#cb19-26"></a>}</span></code></pre></div>
+<p>In the case of the truncated triangular PDF we know it reaches its maximum when evaluated on its mode, meaning we can take the value <span class="math inline">\(h(mode)\)</span> as the constant of step 1.</p>
+<p>Again, let’s plot these results to see how we did.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="simulation-and-validation-.html#cb20-1"></a><span class="co">## Plot and describe the first simulation with many bins</span></span>
+<span id="cb20-2"><a href="simulation-and-validation-.html#cb20-2"></a><span class="kw">hist</span>(simulated.Z.prime.t.and.e,</span>
+<span id="cb20-3"><a href="simulation-and-validation-.html#cb20-3"></a>     <span class="dt">xlab =</span> <span class="st">&quot;z&quot;</span>,</span>
+<span id="cb20-4"><a href="simulation-and-validation-.html#cb20-4"></a>     <span class="dt">breaks =</span> (my.trun.tri.dist<span class="op">$</span>trun.tri.upper <span class="op">-</span><span class="st"> </span>my.trun.tri.dist<span class="op">$</span>trun.tri.lower) <span class="op">*</span><span class="st"> </span><span class="dv">10</span>,</span>
+<span id="cb20-5"><a href="simulation-and-validation-.html#cb20-5"></a>     <span class="dt">freq =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb20-6"><a href="simulation-and-validation-.html#cb20-6"></a></span>
+<span id="cb20-7"><a href="simulation-and-validation-.html#cb20-7"></a><span class="kw">plot.function</span>(</span>
+<span id="cb20-8"><a href="simulation-and-validation-.html#cb20-8"></a>  <span class="cf">function</span>(z) {<span class="kw">sapply</span>(z, my.trun.tri.dist<span class="op">$</span>pdf)},</span>
+<span id="cb20-9"><a href="simulation-and-validation-.html#cb20-9"></a>  <span class="dt">from =</span> <span class="fl">2.99999</span>,</span>
+<span id="cb20-10"><a href="simulation-and-validation-.html#cb20-10"></a>  <span class="dt">to =</span> <span class="fl">8.0001</span>,</span>
+<span id="cb20-11"><a href="simulation-and-validation-.html#cb20-11"></a>  <span class="dt">n =</span> <span class="dv">100000</span>,</span>
+<span id="cb20-12"><a href="simulation-and-validation-.html#cb20-12"></a>  <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb20-13"><a href="simulation-and-validation-.html#cb20-13"></a>  <span class="dt">add =</span> <span class="ot">TRUE</span></span>
+<span id="cb20-14"><a href="simulation-and-validation-.html#cb20-14"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Plot%20Simulated%20Trial%20and%20Error-1.png" width="672" /></p>
+<p>Once again, the distribution closely ressembles the sampled data. Next, we will look into testing the hypotheis that the sample matches the distribution.</p>
+<p>Whichever method is fine for simulating or sampling PDFs, but know that each has its benefits. You would use the inverse CDF ideally on all scenarios as it is easy to implement, given an inverse CDF, but if such is not available to you or there is no interest in deriving one, the slower simulation by trial and error would still prove reliable.</p>
 
+</div>
 </div>
 </div>
             </section>
@@ -215,8 +354,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="truncated-triangular-distribution.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="truncated-triangular-distribution.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="validation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

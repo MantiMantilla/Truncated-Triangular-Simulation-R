@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Simulating the Truncated Triangular Distribution</title>
+  <title>5 Validation | Simulating the Truncated Triangular Distribution</title>
   <meta name="description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Simulating the Truncated Triangular Distribution" />
+  <meta property="og:title" content="5 Validation | Simulating the Truncated Triangular Distribution" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="MantiMantilla/Truncated-Triangular-Simulation-R" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Simulating the Truncated Triangular Distribution" />
+  <meta name="twitter:title" content="5 Validation | Simulating the Truncated Triangular Distribution" />
   
   <meta name="twitter:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="simulation-and-validation-.html"/>
 
-<link rel="next" href="triangular-distribution.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -196,44 +196,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Simulating the Truncated Triangular Distribution</h1>
-<p class="author"><em>Alejandro Mantilla</em></p>
-<p class="date"><em>2021-01-25</em></p>
+<div id="validation" class="section level1">
+<h1><span class="header-section-number">5</span> Validation</h1>
+<p>To validate our claims that both vectors create samples that match the truncated triangular distribution, a few hypothesis tests are in order.</p>
+<p>First, we validate that the sample mean and the distribution mean match; second, we evaluate whether their variance matches. If both these tests are passed, we perform a goodness of fit test. Specifically, a <em>Kolmogorov-Smirnof</em> test and a <em>Chi-Square test</em>.</p>
+<!-- TODO: Populate following parts with content from discrete event simulation course -->
+<div id="hypothesis-test-for-mean" class="section level2">
+<h2><span class="header-section-number">5.1</span> Hypothesis test for Mean</h2>
 </div>
-<div id="intro" class="section level1">
-<h1><span class="header-section-number">1</span> Intro</h1>
-<div id="motivation" class="section level2">
-<h2><span class="header-section-number">1.1</span> Motivation</h2>
-<p>The <em>triangular distribution</em> is a thoroughly studied <em>probability density function</em> (PDF) that usually arises to describe the behavior of a real (<span class="math inline">\(\mathbb{R}\)</span>) random variable for which little information is available. The distribution is an easy fit for most practical scenarios and, as such, makes it extremely versatile as a means to model non-deterministic scenarios mathematically. To further aid our analysis, we consider the <em>truncated distribution</em>, a generic term that encompasses a transform of any given PDF such that it remains a PDF after restricting the function’s domain to an interval within. Our end goal is to perform a few analytical procedures to find parameterized expressions for a few major descriptive statistics and functions (such as the CDF) of both distributions and implement them in the R language. To show how one may realistically use these implementations we will explore a practical example wherein a <em>triangular distribution</em> and a corresponding <em>truncated triangular distribution</em> are constructed using our implementation and then used to generate random samples with <em>Monte Carlo simulation</em>.</p>
+<div id="hypothesis-test-for-variance" class="section level2">
+<h2><span class="header-section-number">5.2</span> Hypothesis test for Variance</h2>
 </div>
-<div id="your-own-flare" class="section level2">
-<h2><span class="header-section-number">1.2</span> Your own flare</h2>
-<p>Those familiar with <em>object-oriented programming</em> might notice our approach takes after a few basic concepts such as <em>constructor functions</em> and <em>composition</em>. If this sounds interesting to you, I encourage you to add your own twist to this exercise and use <em>classes</em> instead of <em>lists</em> but know that it is not a must and we will be using only the most rudimentary features R has to offer.</p>
-<p>This implementation was designed with adaptability in mind, meaning that the same approach should also be compatible with other scripting languages such as <em>Python</em> or <em>JavaScript</em>. Plots aside, no external <em>packages</em> or <em>libraries</em> are required, though we use base R’s <code>plot()</code> family of functions which come pre-installed.</p>
+<div id="kolmogorov-smirnov-test" class="section level2">
+<h2><span class="header-section-number">5.3</span> Kolmogorov-Smirnov Test</h2>
 </div>
-<div id="project-home" class="section level2">
-<h2><span class="header-section-number">1.3</span> Project home</h2>
-<p>All documents, markdown files, scripts, and project images are publicly available in <a href="https://github.com/MantiMantilla/Truncated-Triangular-Simulation-R">this repository</a>.</p>
-</div>
-<div id="disclaimer" class="section level2">
-<h2><span class="header-section-number">1.4</span> Disclaimer</h2>
-<p>All errors are my own. All feedback is welcome.</p>
-</div>
-<div id="acknowledgments" class="section level2">
-<h2><span class="header-section-number">1.5</span> Acknowledgments</h2>
-<p>Special thanks to Alfaima Solano from Universidad de los Andes for their feedback on this project.</p>
-</div>
-<div id="author" class="section level2">
-<h2><span class="header-section-number">1.6</span> Author</h2>
-<p>Alejandro Mantilla</p>
-<p>Data Scientist and Engineer</p>
-<p>Bogotá, Colombia</p>
-</div>
-<div id="license" class="section level2">
-<h2><span class="header-section-number">1.7</span> License</h2>
-<p><a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a></p>
-<p>Copyright (c) 2021 Alejandro Mantilla</p>
+<div id="chi-square-test" class="section level2">
+<h2><span class="header-section-number">5.4</span> Chi-Square Test</h2>
 
 </div>
 </div>
@@ -242,8 +220,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
+<a href="simulation-and-validation-.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="triangular-distribution.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

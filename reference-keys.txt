@@ -29,5 +29,13 @@ mode-1
 variance-1
 an-object-to-hold-these-properties-1
 simulation-and-validation.
-r-markdown
-including-plots
+uniform-distribution
+pseudo-random-uniform-numbers
+pseudo-random-variables
+inverse-cdf-method
+trial-and-error
+validation
+hypothesis-test-for-mean
+hypothesis-test-for-variance
+kolmogorov-smirnov-test
+chi-square-test
