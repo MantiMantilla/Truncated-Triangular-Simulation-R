@@ -24,7 +24,7 @@
 <meta name="author" content="Alejandro Mantilla" />
 
 
-<meta name="date" content="2021-01-25" />
+<meta name="date" content="2021-02-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -174,8 +174,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="validation.html"><a href="validation.html"><i class="fa fa-check"></i><b>5</b> Validation</a><ul>
-<li class="chapter" data-level="5.1" data-path="validation.html"><a href="validation.html#hypothesis-test-for-mean"><i class="fa fa-check"></i><b>5.1</b> Hypothesis test for Mean</a></li>
-<li class="chapter" data-level="5.2" data-path="validation.html"><a href="validation.html#hypothesis-test-for-variance"><i class="fa fa-check"></i><b>5.2</b> Hypothesis test for Variance</a></li>
+<li class="chapter" data-level="5.1" data-path="validation.html"><a href="validation.html#hypothesis-test-for-variance"><i class="fa fa-check"></i><b>5.1</b> Hypothesis test for Variance</a></li>
+<li class="chapter" data-level="5.2" data-path="validation.html"><a href="validation.html#hypothesis-test-for-mean"><i class="fa fa-check"></i><b>5.2</b> Hypothesis test for mean</a></li>
 <li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3</b> Kolmogorov-Smirnov Test</a></li>
 <li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.4</b> Chi-Square Test</a></li>
 </ul></li>
@@ -199,13 +199,167 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="validation" class="section level1">
 <h1><span class="header-section-number">5</span> Validation</h1>
 <p>To validate our claims that both vectors create samples that match the truncated triangular distribution, a few hypothesis tests are in order.</p>
-<p>First, we validate that the sample mean and the distribution mean match; second, we evaluate whether their variance matches. If both these tests are passed, we perform a goodness of fit test. Specifically, a <em>Kolmogorov-Smirnof</em> test and a <em>Chi-Square test</em>.</p>
-<!-- TODO: Populate following parts with content from discrete event simulation course -->
-<div id="hypothesis-test-for-mean" class="section level2">
-<h2><span class="header-section-number">5.1</span> Hypothesis test for Mean</h2>
-</div>
+<p>First, we validate that the sample variance and the distribution variance match; second, we evaluate whether their mean statistics match. If both these tests are passed, we perform a goodness of fit test. Specifically, a <em>Kolmogorov-Smirnof</em> test or a <em>Chi-Square test</em>.</p>
+<p>These tests rely on a significance level (<span class="math inline">\(\alpha\)</span>) which we have appropriately picked to be 0.1. The grater the significance level, the more certain you are that your results are not a product of chance and the true behavior of your random variable.</p>
+<p>Usually when using the more common procedures for testing hypothesis, our data needs to meet a few criteria.</p>
 <div id="hypothesis-test-for-variance" class="section level2">
-<h2><span class="header-section-number">5.2</span> Hypothesis test for Variance</h2>
+<h2><span class="header-section-number">5.1</span> Hypothesis test for Variance</h2>
+<p>Specifically, when testing for variance equivalence using a Chi-Square (<span class="math inline">\(\chi^{2}\)</span>) test, we should validate that the sample variance follows a <span class="math inline">\(\chi^{2}\)</span> distribution.</p>
+<p>This usually isn’t the case but to the detriment that we introduce some uncertainty, the condition can be assumed if the distribution of the data roughly ressembles a normal distribution and the sample size is big enough (our sample size is 10000, no need to worry there).</p>
+<p>If we didn’t know that our data follows a triangular distribution this could be a fairly save assumption, but because that really isn’t the case, more advanced techniques like bootstraping should be used while performing this test.</p>
+<p>Let’s study the mathematical procedure.</p>
+<p>Since we want to validate that the variance of the sample is the same as that of the distribution (some value <span class="math inline">\(\sigma^{2}\)</span>), we make opposing statements about it. We call these statements our <em>null hypothesis</em> and our <em>alternate hypothesis</em>. In the end, we should be able to say, for some certainty, whether or not we may reject the <em>null hypothesis</em>.</p>
+<p><span class="math display">\[
+  H_{0}:\hat{\sigma} ^{2} = \sigma^{2}
+\]</span></p>
+<p><span class="math display">\[
+  H_{a}:\hat{\sigma}^{2} \neq \sigma^{2}
+\]</span></p>
+<p>We then calculate the sample variance:</p>
+<p><span class="math display">\[
+  S^{2}=\sum_{i=1}^{n}\frac{(x_{i}-\bar{X})^{2}}{n-1}
+\]</span></p>
+<p>and plug it into the test statistic:</p>
+<p><span class="math display">\[
+  \left(\frac{S}{\sigma}\right)^{2}(n-1)\sim\chi^{2}_{n-1}.
+\]</span></p>
+<p>The <em>alternate hypothesis</em> tells us that this is a two-tailed test, meaning we must use both ends of the <span class="math inline">\(\chi^{2}\)</span> distribution. We reject <span class="math inline">\(H_{0}\)</span> if the test statistic falls outside the interval bounded by the <span class="math inline">\(\chi^{2}\)</span> inverse CDF evaluated at <span class="math inline">\(1-\frac{\alpha}{2}\)</span> and at <span class="math inline">\(\frac{\alpha}{2}\)</span> with <span class="math inline">\(n-1\)</span> degrees of freedom. This may seem unorthodox, but the most common notation used to reference these bounds is <span class="math inline">\(\chi^{2}_{1-\frac{\alpha}{2},n-1}\)</span> and <span class="math inline">\(\chi^{2}_{\frac{\alpha}{2},n-1}\)</span>.</p>
+<p><span class="math display">\[
+  \chi^{2}_{\frac{\alpha}{2},n-1}\leq\left(\frac{S}{\sigma}\right)^{2}(n-1)\leq \chi^{2}_{1-\frac{\alpha}{2},n-1} \Rightarrow \hat{\sigma}^{2}=\sigma^{2}
+\]</span></p>
+<p>We shall now implement this in R. Do consider, there is no exact method to calculate the inverse CDF of the <span class="math inline">\(\chi^{2}\)</span> distribution that we could reasonably implement such as a closed form expression, and so we must use R’s native function to find approximate values. Most mathematical software come with their own implementation of this method or have third party libraries to extend their functionality (such as SciPy for Python).</p>
+<p>Do remember that we have stored the simulated data for each method in their respective variables: <code>simulated.Z.prime.Inv.CDF</code> and <code>simulated.Z.prime.t.and.e</code>, and the truncated triangular distribution object in the variable <code>my.trun.tri.dist</code>.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="validation.html#cb21-1"></a><span class="co">## Inverse CDF method</span></span>
+<span id="cb21-2"><a href="validation.html#cb21-2"></a></span>
+<span id="cb21-3"><a href="validation.html#cb21-3"></a>alpha &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
+<span id="cb21-4"><a href="validation.html#cb21-4"></a>degrees.of.freedom &lt;-<span class="st"> </span>(<span class="kw">length</span>(simulated.Z.prime.Inv.CDF) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb21-5"><a href="validation.html#cb21-5"></a></span>
+<span id="cb21-6"><a href="validation.html#cb21-6"></a><span class="co">## 1. Sample Variance and true variance</span></span>
+<span id="cb21-7"><a href="validation.html#cb21-7"></a>s.squared.Inv.CDF &lt;-<span class="st"> </span><span class="kw">sum</span>((<span class="kw">mean</span>(simulated.Z.prime.Inv.CDF) <span class="op">-</span><span class="st"> </span>simulated.Z.prime.Inv.CDF) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>degrees.of.freedom</span>
+<span id="cb21-8"><a href="validation.html#cb21-8"></a></span>
+<span id="cb21-9"><a href="validation.html#cb21-9"></a>sigma.squared &lt;-<span class="st"> </span>my.trun.tri.dist<span class="op">$</span>trun.tri.var</span>
+<span id="cb21-10"><a href="validation.html#cb21-10"></a></span>
+<span id="cb21-11"><a href="validation.html#cb21-11"></a><span class="co">## 2. Test Statistic</span></span>
+<span id="cb21-12"><a href="validation.html#cb21-12"></a>test.statistic &lt;-<span class="st"> </span>s.squared.Inv.CDF <span class="op">*</span><span class="st"> </span>degrees.of.freedom <span class="op">/</span><span class="st"> </span>sigma.squared</span>
+<span id="cb21-13"><a href="validation.html#cb21-13"></a></span>
+<span id="cb21-14"><a href="validation.html#cb21-14"></a><span class="co">## 3. Evaluate if statistic falls within bounds</span></span>
+<span id="cb21-15"><a href="validation.html#cb21-15"></a>lower.bound.criteria &lt;-<span class="st"> </span>test.statistic <span class="op">&gt;=</span><span class="st"> </span><span class="kw">qchisq</span>(<span class="dt">p =</span> alpha <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">df =</span> degrees.of.freedom)</span>
+<span id="cb21-16"><a href="validation.html#cb21-16"></a>upper.bound.criteria &lt;-<span class="st"> </span>test.statistic <span class="op">&lt;=</span><span class="st"> </span><span class="kw">qchisq</span>(<span class="dt">p =</span> <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">df =</span> degrees.of.freedom)</span>
+<span id="cb21-17"><a href="validation.html#cb21-17"></a></span>
+<span id="cb21-18"><a href="validation.html#cb21-18"></a><span class="co">## 4. Conclude:</span></span>
+<span id="cb21-19"><a href="validation.html#cb21-19"></a><span class="kw">print</span>(<span class="kw">paste</span>(</span>
+<span id="cb21-20"><a href="validation.html#cb21-20"></a>  <span class="st">&quot;With a significance level of 0.1, we &quot;</span>,</span>
+<span id="cb21-21"><a href="validation.html#cb21-21"></a>  <span class="cf">if</span> (lower.bound.criteria <span class="op">&amp;</span><span class="st"> </span>upper.bound.criteria) {</span>
+<span id="cb21-22"><a href="validation.html#cb21-22"></a>    <span class="st">&quot;may not reject the null hypothesis&quot;</span></span>
+<span id="cb21-23"><a href="validation.html#cb21-23"></a>  } <span class="cf">else</span> {</span>
+<span id="cb21-24"><a href="validation.html#cb21-24"></a>    <span class="st">&quot;may reject the null hypothesis&quot;</span></span>
+<span id="cb21-25"><a href="validation.html#cb21-25"></a>  },</span>
+<span id="cb21-26"><a href="validation.html#cb21-26"></a>  <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;With a significance level of 0.1, we may not reject the null hypothesis&quot;</code></pre>
+<p>Effectively, via the inverse CDF method we generate a sample with the same variance as the underlying truncated triangular distribution.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="validation.html#cb23-1"></a><span class="co">## Trial and Error</span></span>
+<span id="cb23-2"><a href="validation.html#cb23-2"></a></span>
+<span id="cb23-3"><a href="validation.html#cb23-3"></a>degrees.of.freedom &lt;-<span class="st"> </span>(<span class="kw">length</span>(simulated.Z.prime.t.and.e) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb23-4"><a href="validation.html#cb23-4"></a></span>
+<span id="cb23-5"><a href="validation.html#cb23-5"></a><span class="co">## 1. Sample Variance</span></span>
+<span id="cb23-6"><a href="validation.html#cb23-6"></a>s.squared.t.and.e &lt;-<span class="st"> </span><span class="kw">sum</span>((<span class="kw">mean</span>(simulated.Z.prime.t.and.e) <span class="op">-</span><span class="st"> </span>simulated.Z.prime.t.and.e) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>degrees.of.freedom</span>
+<span id="cb23-7"><a href="validation.html#cb23-7"></a></span>
+<span id="cb23-8"><a href="validation.html#cb23-8"></a><span class="co">## 2. Test Statistic</span></span>
+<span id="cb23-9"><a href="validation.html#cb23-9"></a>test.statistic &lt;-<span class="st"> </span>s.squared.t.and.e <span class="op">*</span><span class="st"> </span>degrees.of.freedom <span class="op">/</span><span class="st"> </span>sigma.squared</span>
+<span id="cb23-10"><a href="validation.html#cb23-10"></a></span>
+<span id="cb23-11"><a href="validation.html#cb23-11"></a><span class="co">## 3. Evaluate if statistic falls within bounds</span></span>
+<span id="cb23-12"><a href="validation.html#cb23-12"></a>lower.bound.criteria &lt;-<span class="st"> </span>test.statistic <span class="op">&gt;=</span><span class="st"> </span><span class="kw">qchisq</span>(<span class="dt">p =</span> alpha <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">df =</span> degrees.of.freedom)</span>
+<span id="cb23-13"><a href="validation.html#cb23-13"></a>upper.bound.criteria &lt;-<span class="st"> </span>test.statistic <span class="op">&lt;=</span><span class="st"> </span><span class="kw">qchisq</span>(<span class="dt">p =</span> <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">df =</span> degrees.of.freedom)</span>
+<span id="cb23-14"><a href="validation.html#cb23-14"></a></span>
+<span id="cb23-15"><a href="validation.html#cb23-15"></a><span class="co">## 4. Conclude:</span></span>
+<span id="cb23-16"><a href="validation.html#cb23-16"></a><span class="kw">print</span>(<span class="kw">paste</span>(</span>
+<span id="cb23-17"><a href="validation.html#cb23-17"></a>  <span class="st">&quot;With a significance level of 0.1, we &quot;</span>,</span>
+<span id="cb23-18"><a href="validation.html#cb23-18"></a>  <span class="cf">if</span> (lower.bound.criteria <span class="op">&amp;</span><span class="st"> </span>upper.bound.criteria) {</span>
+<span id="cb23-19"><a href="validation.html#cb23-19"></a>    <span class="st">&quot;may not reject the null hypothesis&quot;</span></span>
+<span id="cb23-20"><a href="validation.html#cb23-20"></a>  } <span class="cf">else</span> {</span>
+<span id="cb23-21"><a href="validation.html#cb23-21"></a>    <span class="st">&quot;may reject the null hypothesis&quot;</span></span>
+<span id="cb23-22"><a href="validation.html#cb23-22"></a>  },</span>
+<span id="cb23-23"><a href="validation.html#cb23-23"></a>  <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;With a significance level of 0.1, we may not reject the null hypothesis&quot;</code></pre>
+<p>Effectively, via the trial and error method we generate a sample with the same variance as the underlying truncated triangular distribution.</p>
+<p>We may move on to test for the mean.</p>
+</div>
+<div id="hypothesis-test-for-mean" class="section level2">
+<h2><span class="header-section-number">5.2</span> Hypothesis test for mean</h2>
+<p>Specifically, when testing for mean equivalence using a t-test, we should validate that the sample mean follows a normal distribution. This does not mean that the data should be normally distributed.</p>
+<p>This assumption, because of the central limit theorem, should hold up for fairly large datasets like ours. Roughly speaking, this can be assumed of any dataset with over 50 complete observations.</p>
+<p>Let’s study the mathematical procedure.</p>
+<p>We now want to validate that the mean of the sample is the same as that of the distribution (some value <span class="math inline">\(\mu\)</span>), we make opposing statements about it.</p>
+<p><span class="math display">\[
+  H_{0}:\hat{\mu} = \mu
+\]</span></p>
+<p><span class="math display">\[
+  H_{a}:\hat{\mu} \neq \mu
+\]</span></p>
+<p>We then calculate the sample mean:</p>
+<p><span class="math display">\[
+  \bar{X}=\frac{\sum_{i=1}^{n}x_{i}}{n}
+\]</span></p>
+<p>and plug it into the test statistic:</p>
+<p><span class="math display">\[
+  \frac{\bar{X}-\mu}{\frac{S}{\sqrt{n}}} \sim t_{n-1}.
+\]</span></p>
+<p>The <em>alternate hypothesis</em> tells us that this is a two-tailed test, meaning we must use both ends of Student’s t distribution. We reject <span class="math inline">\(H_{0}\)</span> if the test statistic falls outside the interval bounded by the t inverse CDF evaluated at <span class="math inline">\(1-\frac{\alpha}{2}\)</span> and at <span class="math inline">\(\frac{\alpha}{2}\)</span> with <span class="math inline">\(n-1\)</span> degrees of freedom. This may seem unorthodox, but the most common notation used to reference these bounds is <span class="math inline">\(t_{1-\frac{\alpha}{2},n-1}\)</span> and <span class="math inline">\(t_{\frac{\alpha}{2},n-1}\)</span>.</p>
+<p><span class="math display">\[
+  t_{\frac{\alpha}{2},n-1}\leq\frac{\bar{X}-\mu}{\frac{S}{\sqrt{n}}}\leq t_{1-\frac{\alpha}{2},n-1} \Rightarrow \hat{\mu}=\mu
+\]</span></p>
+<p>We shall now implement this in R. Same as with the test for variance, there is no exact method to calculate the inverse CDF of Student’s t distribution that we could reasonably implement, and so we must use R’s native function to find approximate values.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="validation.html#cb25-1"></a><span class="co">## Inverse CDF method</span></span>
+<span id="cb25-2"><a href="validation.html#cb25-2"></a></span>
+<span id="cb25-3"><a href="validation.html#cb25-3"></a><span class="co">## 1. Sample mean and true mean</span></span>
+<span id="cb25-4"><a href="validation.html#cb25-4"></a>x.bar.Inv.CDF &lt;-<span class="st"> </span><span class="kw">mean</span>(simulated.Z.prime.Inv.CDF)</span>
+<span id="cb25-5"><a href="validation.html#cb25-5"></a></span>
+<span id="cb25-6"><a href="validation.html#cb25-6"></a>mu &lt;-<span class="st"> </span>my.trun.tri.dist<span class="op">$</span>trun.tri.mean</span>
+<span id="cb25-7"><a href="validation.html#cb25-7"></a></span>
+<span id="cb25-8"><a href="validation.html#cb25-8"></a><span class="co">## 2. Test Statistic</span></span>
+<span id="cb25-9"><a href="validation.html#cb25-9"></a>test.statistic &lt;-<span class="st"> </span>(x.bar.Inv.CDF <span class="op">-</span><span class="st"> </span>mu) <span class="op">/</span><span class="st"> </span>(<span class="kw">sqrt</span>(sigma.squared <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(simulated.Z.prime.Inv.CDF)))</span>
+<span id="cb25-10"><a href="validation.html#cb25-10"></a></span>
+<span id="cb25-11"><a href="validation.html#cb25-11"></a><span class="co">## 3. Evaluate if statistic falls within bounds</span></span>
+<span id="cb25-12"><a href="validation.html#cb25-12"></a>lower.bound.criteria &lt;-<span class="st"> </span>test.statistic <span class="op">&gt;=</span><span class="st"> </span><span class="kw">qt</span>(<span class="dt">p =</span> alpha <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">df =</span> degrees.of.freedom)</span>
+<span id="cb25-13"><a href="validation.html#cb25-13"></a>upper.bound.criteria &lt;-<span class="st"> </span>test.statistic <span class="op">&lt;=</span><span class="st"> </span><span class="kw">qt</span>(<span class="dt">p =</span> <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">df =</span> degrees.of.freedom)</span>
+<span id="cb25-14"><a href="validation.html#cb25-14"></a></span>
+<span id="cb25-15"><a href="validation.html#cb25-15"></a><span class="co">## 4. Conclude:</span></span>
+<span id="cb25-16"><a href="validation.html#cb25-16"></a><span class="kw">print</span>(<span class="kw">paste</span>(</span>
+<span id="cb25-17"><a href="validation.html#cb25-17"></a>  <span class="st">&quot;With a significance level of 0.1, we &quot;</span>,</span>
+<span id="cb25-18"><a href="validation.html#cb25-18"></a>  <span class="cf">if</span> (lower.bound.criteria <span class="op">&amp;</span><span class="st"> </span>upper.bound.criteria) {</span>
+<span id="cb25-19"><a href="validation.html#cb25-19"></a>    <span class="st">&quot;may not reject the null hypothesis&quot;</span></span>
+<span id="cb25-20"><a href="validation.html#cb25-20"></a>  } <span class="cf">else</span> {</span>
+<span id="cb25-21"><a href="validation.html#cb25-21"></a>    <span class="st">&quot;may reject the null hypothesis&quot;</span></span>
+<span id="cb25-22"><a href="validation.html#cb25-22"></a>  },</span>
+<span id="cb25-23"><a href="validation.html#cb25-23"></a>  <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;With a significance level of 0.1, we may not reject the null hypothesis&quot;</code></pre>
+<p>Effectively, via the inverse CDF method we generate a sample with the same variance as the underlying truncated triangular distribution.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="validation.html#cb27-1"></a><span class="co">## Trial and Error</span></span>
+<span id="cb27-2"><a href="validation.html#cb27-2"></a></span>
+<span id="cb27-3"><a href="validation.html#cb27-3"></a><span class="co">## 1. Sample mean and true mean</span></span>
+<span id="cb27-4"><a href="validation.html#cb27-4"></a>x.bar.t.and.e &lt;-<span class="st"> </span><span class="kw">mean</span>(simulated.Z.prime.t.and.e)</span>
+<span id="cb27-5"><a href="validation.html#cb27-5"></a></span>
+<span id="cb27-6"><a href="validation.html#cb27-6"></a>mu &lt;-<span class="st"> </span>my.trun.tri.dist<span class="op">$</span>trun.tri.mean</span>
+<span id="cb27-7"><a href="validation.html#cb27-7"></a></span>
+<span id="cb27-8"><a href="validation.html#cb27-8"></a><span class="co">## 2. Test Statistic</span></span>
+<span id="cb27-9"><a href="validation.html#cb27-9"></a>test.statistic &lt;-<span class="st"> </span>(x.bar.t.and.e <span class="op">-</span><span class="st"> </span>mu) <span class="op">/</span><span class="st"> </span>(<span class="kw">sqrt</span>(sigma.squared <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(simulated.Z.prime.t.and.e)))</span>
+<span id="cb27-10"><a href="validation.html#cb27-10"></a></span>
+<span id="cb27-11"><a href="validation.html#cb27-11"></a><span class="co">## 3. Evaluate if statistic falls within bounds</span></span>
+<span id="cb27-12"><a href="validation.html#cb27-12"></a>lower.bound.criteria &lt;-<span class="st"> </span>test.statistic <span class="op">&gt;=</span><span class="st"> </span><span class="kw">qt</span>(<span class="dt">p =</span> alpha <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">df =</span> degrees.of.freedom)</span>
+<span id="cb27-13"><a href="validation.html#cb27-13"></a>upper.bound.criteria &lt;-<span class="st"> </span>test.statistic <span class="op">&lt;=</span><span class="st"> </span><span class="kw">qt</span>(<span class="dt">p =</span> <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">df =</span> degrees.of.freedom)</span>
+<span id="cb27-14"><a href="validation.html#cb27-14"></a></span>
+<span id="cb27-15"><a href="validation.html#cb27-15"></a><span class="co">## 4. Conclude:</span></span>
+<span id="cb27-16"><a href="validation.html#cb27-16"></a><span class="kw">print</span>(<span class="kw">paste</span>(</span>
+<span id="cb27-17"><a href="validation.html#cb27-17"></a>  <span class="st">&quot;With a significance level of 0.1, we &quot;</span>,</span>
+<span id="cb27-18"><a href="validation.html#cb27-18"></a>  <span class="cf">if</span> (lower.bound.criteria <span class="op">&amp;</span><span class="st"> </span>upper.bound.criteria) {</span>
+<span id="cb27-19"><a href="validation.html#cb27-19"></a>    <span class="st">&quot;may not reject the null hypothesis&quot;</span></span>
+<span id="cb27-20"><a href="validation.html#cb27-20"></a>  } <span class="cf">else</span> {</span>
+<span id="cb27-21"><a href="validation.html#cb27-21"></a>    <span class="st">&quot;may reject the null hypothesis&quot;</span></span>
+<span id="cb27-22"><a href="validation.html#cb27-22"></a>  },</span>
+<span id="cb27-23"><a href="validation.html#cb27-23"></a>  <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;With a significance level of 0.1, we may not reject the null hypothesis&quot;</code></pre>
+<p>Effectively, via the trial and error method we generate a sample with the same variance as the underlying truncated triangular distribution.</p>
+<p>We may move on to the goodness of fit test.</p>
 </div>
 <div id="kolmogorov-smirnov-test" class="section level2">
 <h2><span class="header-section-number">5.3</span> Kolmogorov-Smirnov Test</h2>
