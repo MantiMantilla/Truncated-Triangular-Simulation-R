@@ -2,10 +2,7 @@ intro
 motivation
 your-own-flare
 project-home
-disclaimer
-acknowledgments
-author
-license
+license-author-and-acknowledgements
 triangular-distribution
 distributions
 triangular-pdf
