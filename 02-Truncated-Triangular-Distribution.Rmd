@@ -321,7 +321,7 @@ $$
 $$
 
 $$
-  = \frac{\frac{3b^2U-3M^2U-2b^3+2M^3}{3\left(-L+U\right)\left(U-M\right)}}{F(b)-F(a)}
+  = \frac{\frac{3b^2U-3M^2U-2b^3+2M^3}{3\left(U-L\right)\left(U-M\right)}}{F(b)-F(a)}
 $$
 
 ### Median

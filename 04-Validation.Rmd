@@ -446,7 +446,7 @@ print(paste(
   sep = ""))
 ```
 
-Effectively, via the inverse CDF method we generate a sample with the same variance as the underlying truncated triangular distribution.
+Effectively, via the inverse CDF method we generate a sample with the same mean as the underlying truncated triangular distribution.
 
 ```{r Hypothesis mean trial and error, echo=TRUE}
 ## Trial and Error
@@ -474,9 +474,9 @@ print(paste(
   sep = ""))
 ```
 
-Effectively, via the trial and error method we generate a sample with the same variance as the underlying truncated triangular distribution.
+Effectively, via the trial and error method we generate a sample with the same mean as the underlying truncated triangular distribution.
 
-We may move on to the goodness of fit test.
+We may move on to the goodness of fit tests.
 
 ## Kolmogorov-Smirnov Test
 

@@ -29,15 +29,13 @@ This implementation was designed with adaptability in mind, meaning that the sam
 
 All documents, markdown files, scripts, and project images are publicly available in [this repository](https://github.com/MantiMantilla/Truncated-Triangular-Simulation-R).
 
-## Disclaimer
-
 All errors are my own. All feedback is welcome.
 
-## Acknowledgments
+## License, Author, and Acknowledgements
 
-Special thanks to Alfaima Solano from Universidad de los Andes for their feedback on this project.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Author
+Copyright (c) 2021 Alejandro Mantilla
 
 Alejandro Mantilla
 
@@ -45,8 +43,4 @@ Data Scientist and Engineer
 
 Bogotá, Colombia
 
-## License
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-Copyright (c) 2021 Alejandro Mantilla
+Special thanks to Alfaima Solano from Universidad de los Andes for their feedback on this project.
