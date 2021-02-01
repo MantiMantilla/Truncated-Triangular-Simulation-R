@@ -373,7 +373,6 @@ while (success.count < 10000) {
     simulated.Z.prime.t.and.e[success.count] <- u.1
   }
 }
-
 ```
 
 In the case of the truncated triangular PDF we know it reaches its maximum when evaluated on its mode, meaning we can take the value $h(mode)$ as the constant of step 1.

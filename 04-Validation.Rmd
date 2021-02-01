@@ -1,18 +1,482 @@
+```{r truncated class validation, include=FALSE}
+## Returns a function that returns a list with each of its elements defined as functions or vectors of one
+## element that describe aspects of a truncated triangular distribution
+## (pdf, cdf, inverse cdf, mean, median, mode, upper bound, lower bound, variance).
+generate.truncated.triangular <- function(a, b, orig.tri.dist) {
+  
+  ## Original parameters of the triangular distribution
+  M <- orig.tri.dist$tri.mode
+  L <- orig.tri.dist$tri.lower
+  U <- orig.tri.dist$tri.upper
+  
+  ## Throw an error if the new bounds do not fall witin the old bounds of the triangular pdf.
+  if (a < L | b > U) {
+    stop("The new bounds of the pdf do not fall within the original range")
+  }
+  
+  ## Create a function that returns the pdf of the truncated triangular, given some x.
+  pdf <- function(x) {
+    if (a < x & x <= b) {
+      pdf.g <- orig.tri.dist$pdf
+      cumul.F <- orig.tri.dist$cdf
+      result <- pdf.g(x) / (cumul.F(b) - cumul.F(a))
+      return(result)
+    } else {
+      result <- 0
+      return(result)
+    }
+  }
+  
+  ## Create a function that returns the cdf of the truncated triangular, given some x.
+  cdf <- function(x) {
+    cumul.F <- orig.tri.dist$cdf
+    if (x <= a) {
+      result <- 0
+    } else if (a < x & x <= b) {
+      result <- (cumul.F(x) - cumul.F(a)) / (cumul.F(b) - cumul.F(a))
+    } else if (b < x) {
+      result <- 1
+    }
+    return(result)
+  }
+  
+  ## Create a function that returns the inverse cdf of the truncated triangular, given some probability p.
+  inverse.cdf <- function(p) {
+    result <-
+      orig.tri.dist$inverse.cdf(p * (orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)) + orig.tri.dist$cdf(a))
+    return(result)
+  }
+  
+  ## Create a vector of length 1 that describes the mean of the distribution
+  trun.tri.mean <- if (a <= b & b < M) {
+    result.numerator <-
+      (2 * (-3 * L * ((b ^ 2) / 2 - (a ^ 2) / 2) + b ^ 3 - a ^ 3)) / (3 * (U - L) * (M - L))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator / result.denominator
+  } else if (a < M & b >= M) {
+    result.numerator <-
+      (
+        -M ^ 3 * U - 2 * a ^ 3 * U + 3 * L * a ^ 2 * U + 3 * M * b ^ 2 * U - 3 * L * b ^ 2 * U + L * M ^ 3 + 2 * M * a ^ 3 - 3 * L * M * a ^ 2 - 2 * M * b ^ 3 + 2 * L * b ^ 3
+      ) / (3 * (U - L) * (M - L) * (U - M))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator / result.denominator
+  } else if (M <= a & a <= b) {
+    result.numerator <-
+      (3 * b ^ 2 * U - 3 * a ^ 2 * U - 2 * b ^ 3 + 2 * a ^ 3) / (3 * (U - L) * (U - M))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    result.numerator / result.denominator
+  }
+  
+  ## Create a vector of length 1 that describes the median of the distribution
+  
+  trun.tri.median <- inverse.cdf(0.5)
+  
+  ## Create a vector of length 1 that describes the mode of the distribution
+  trun.tri.mode <- if (a <= b & b <= M) {
+    b
+  } else if (a <= b & b >= M) {
+    M
+  } else if (a >= M & b >= a) {
+    a
+  }
+  
+  ## Create a vector of length 1 that describes the upper bound of the distribution's domain
+  trun.tri.upper <- b
+  
+  ## Create a vector of length 1 that describes the lower bound of the distribution's domain
+  trun.tri.lower <- a
+  
+  ## Create a vector of length 1 that describes the variance of the distribution
+  trun.tri.var <- if (a <= b & b < M) {
+    result.numerator <-
+      (-4 * L * ((b ^ 3) / 3 - (a ^ 3) / 3) + b ^ 4 - a ^ 4) / (2 * (U - L) * (M - L))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+  } else if (a < M & b >= M) {
+    result.numerator <-
+      (
+        -M ^ 4 * U - 3 * a ^ 4 * U + 4 * L * a ^ 3 * U + 4 * M * b ^ 3 * U - 4 * L * b ^ 3 * U + L * M ^ 4 + 3 * M * a ^ 4 - 4 * L * M * a ^ 3 - 3 * M * b ^ 4 + 3 * L * b ^ 4
+      ) / (6 * (U - L) * (M - L) * (U - M))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+  } else if (M <= a & a <= b) {
+    result.numerator <-
+      (4 * (b ^ 3) * U - 4 * (a ^ 3) * U - 2 * b ^ 4 + 3 * a ^ 4) / (6 * (U - L) * (U - M))
+    result.denominator <-
+      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
+    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+  }
+  
+  ## Build the list and return it. This list contains all major properties of the truncated triangular distribution
+  return(
+    list(
+      pdf = pdf,
+      cdf = cdf,
+      inverse.cdf = inverse.cdf,
+      trun.tri.mean = trun.tri.mean,
+      trun.tri.median = trun.tri.median,
+      trun.tri.mode = trun.tri.mode,
+      trun.tri.upper = trun.tri.upper,
+      trun.tri.lower = trun.tri.lower,
+      trun.tri.var = trun.tri.var
+    )
+  )
+}
+```
+
+```{r triangular class validation, include=FALSE}
+## Returns a function that returns a list with each of its elements defined as functions or vectors of one
+## element that describe aspects of a triangular distribution
+## (pdf, cdf, inverse cdf, mean, median, mode, upper bound, lower bound, variance)
+generate.triangular <- function(L, U, M) {
+  
+  ## Create a function that returns the pdf of the triangular, given some x.
+  pdf <- function(x) {
+    if (x < L) {
+      result <- 0
+    } else if (x < M) {
+      result <- 2 * (x - L) / ((U - L) * (M - L))
+    } else if (x == M) {
+      result <- 2 / (U - L)
+    } else if (x <= U) {
+      result <- 2 * (U - x) / ((U - L) * (U - M))
+    } else if (U < x) {
+      result <- 0
+    }
+    return(result)
+  }
+  
+  ## Create a function that returns the cdf of the triangular, given some x.
+  cdf <- function(x) {
+    if (x <= L) {
+      result <- 0
+    } else if (x <= M) {
+      result <- ((x - L) ^ 2) / ((U - L) * (M - L))
+    } else if (x < U) {
+      result <- 1 - ((U - x) ^ 2) / ((U - L) * (U - M))
+    } else if (U <= x) {
+      result <- 1
+    }
+    return(result)
+  }
+  
+  ## Create a function that returns the inverse cdf of the triangular, given some probability p.
+  inverse.cdf <- function(p) {
+    if (p < (M - L) / (U - L)) {
+      result <- L + sqrt(max(0, (M - L) * (U - L) * p))
+    } else if (p >= (M - L) / (U - L)) {
+      result <- U - sqrt(max(0, (U - L) * (U - M) * (1 - p)))
+    }
+    return(result)
+  }
+  
+  ## Create a vector of length 1 that describes the mean of the distribution
+  tri.mean <- (L + U + M) / 3
+  
+  ## Create a vector of length 1 that describes the median of the distribution
+  tri.median <- inverse.cdf(0.5)
+  
+  ## Create a vector of length 1 that describes the mode of the distribution
+  tri.mode <- M
+  
+  ## Create a vector of length 1 that describes the upper bound of the distribution's domain
+  tri.upper <- U
+  
+  ## Create a vector of length 1 that describes the lower bound of the distribution's domain
+  tri.lower <- L
+  
+  ## Create a vector of length 1 that describes the variance of the distribution
+  tri.var <-
+    ((L ^ 2) + (U ^ 2) + (M ^ 2) - L * U - L * M - U * M) / 18
+  
+  ## Build the list and return it. This list contains all major properties of the triangular distribution
+  return(
+    list(
+      pdf = pdf,
+      cdf = cdf,
+      inverse.cdf = inverse.cdf,
+      tri.mean = tri.mean,
+      tri.median = tri.median,
+      tri.mode = tri.mode,
+      tri.upper = tri.upper,
+      tri.lower = tri.lower,
+      tri.var = tri.var
+    )
+  )
+}
+```
+
+```{r Distributions Validation, include=FALSE}
+## Set a seed so results are replicable
+set.seed(10)
+
+## Create a list that contains the major properties of a triangular
+## distribution with L = 2, U = 9, and M = 7
+my.tri.dist <- generate.triangular(L = 2, U = 9, M = 7)
+
+## Create a list that contains the major properties of a truncated
+## triangular distribution between a = 3 and b = 8, based on the
+## previous triangular
+my.trun.tri.dist <-
+  generate.truncated.triangular(a = 3,
+                                b = 8,
+                                orig.tri.dist = my.tri.dist)
+```
+
+```{r Inverse CDF Validation, include=FALSE}
+## 1. Generate a sequence of uniform random numbers on the interval [0, 1].
+## 10000 should be enough.
+U <- runif(n = 10000)
+
+## 2. Transform all elements of the U sequence with the inverse CDF
+## of the truncated distribution
+simulated.Z.prime.Inv.CDF <- sapply(U, my.trun.tri.dist$inverse.cdf)
+```
+
+```{r Simulated Trial and Error Validation, include=FALSE}
+## Simulate 10000 instances of a random variable with f(x) = truncated triangular by trial and error.
+simulated.Z.prime.t.and.e <- rep(0, 10000)
+success.count <- 0
+## Stop once we've achieved 10000 succesful numbers
+while (success.count < 10000) {
+  ## Step 2
+  u.1 <-
+    runif(
+      n = 1,
+      min = my.trun.tri.dist$trun.tri.lower,
+      max = my.trun.tri.dist$trun.tri.upper
+    )
+  ## Step 3
+  u.2 <-
+    runif(
+      n = 1,
+      min = 0,
+      max = my.trun.tri.dist$pdf(my.trun.tri.dist$trun.tri.mode)
+    )
+  ## Step 4
+  if (u.2 <= my.trun.tri.dist$pdf(u.1)) {
+    # Step 5
+    success.count <- success.count + 1
+    simulated.Z.prime.t.and.e[success.count] <- u.1
+  }
+}
+```
+
 # Validation
 
 To validate our claims that both vectors create samples that match the truncated triangular distribution, a few hypothesis tests are in order.
 
-First, we validate that the sample mean and the distribution mean match; second, we evaluate whether their variance matches. If both these tests are passed, we perform a goodness of fit test. Specifically, a _Kolmogorov-Smirnof_ test and a _Chi-Square test_.
+First, we validate that the sample variance and the distribution variance match; second, we evaluate whether their mean statistics match. If both these tests are passed, we perform a goodness of fit test. Specifically, a _Kolmogorov-Smirnof_ test or a _Chi-Square test_.
 
-<!-- TODO: Populate following parts with content from discrete event simulation course -->
+These tests rely on a significance level ($\alpha$) which we have appropriately picked to be 0.1. The grater the significance level, the more certain you are that your results are not a product of chance and the true behavior of your random variable.
 
-## Hypothesis test for Mean
-
-
+Usually when using the more common procedures for testing hypothesis, our data needs to meet a few criteria.
 
 ## Hypothesis test for Variance
 
+Specifically, when testing for variance equivalence using a Chi-Square ($\chi^{2}$) test, we should validate that the sample variance follows a $\chi^{2}$ distribution.
 
+This usually isn't the case but to the detriment that we introduce some uncertainty, the condition can be assumed if the distribution of the data roughly ressembles a normal distribution and the sample size is big enough (our sample size is 10000, no need to worry there).
+
+If we didn't know that our data follows a triangular distribution this could be a fairly save assumption, but because that really isn't the case, more advanced techniques like bootstraping should be used while performing this test.
+
+Let's study the mathematical procedure.
+
+Since we want to validate that the variance of the sample is the same as that of the distribution (some value $\sigma^{2}$), we make opposing statements about it. We call these statements our _null hypothesis_ and our _alternate hypothesis_. In the end, we should be able to say, for some certainty, whether or not we may reject the _null hypothesis_.
+
+$$
+  H_{0}:\hat{\sigma} ^{2} = \sigma^{2}
+$$
+
+$$
+  H_{a}:\hat{\sigma}^{2} \neq \sigma^{2}
+$$
+
+We then calculate the sample variance:
+
+$$
+  S^{2}=\sum_{i=1}^{n}\frac{(x_{i}-\bar{X})^{2}}{n-1}
+$$
+
+and plug it into the test statistic:
+
+$$
+  \left(\frac{S}{\sigma}\right)^{2}(n-1)\sim\chi^{2}_{n-1}.
+$$
+
+The _alternate hypothesis_ tells us that this is a two-tailed test, meaning we must use both ends of the $\chi^{2}$ distribution. We reject $H_{0}$ if the test statistic falls outside the interval bounded by the $\chi^{2}$ inverse CDF evaluated at $1-\frac{\alpha}{2}$ and at $\frac{\alpha}{2}$ with $n-1$ degrees of freedom. This may seem unorthodox, but the most common notation used to reference these bounds is $\chi^{2}_{1-\frac{\alpha}{2},n-1}$ and $\chi^{2}_{\frac{\alpha}{2},n-1}$. 
+
+$$
+  \chi^{2}_{\frac{\alpha}{2},n-1}\leq\left(\frac{S}{\sigma}\right)^{2}(n-1)\leq \chi^{2}_{1-\frac{\alpha}{2},n-1} \Rightarrow \hat{\sigma}^{2}=\sigma^{2}
+$$
+
+We shall now implement this in R. Do consider, there is no exact method to calculate the inverse CDF of the $\chi^{2}$ distribution that we could reasonably implement such as a closed form expression, and so we must use R's native function to find approximate values. Most mathematical software come with their own implementation of this method or have third party libraries to extend their functionality (such as SciPy for Python).
+
+Do remember that we have stored the simulated data for each method in their respective variables: `simulated.Z.prime.Inv.CDF` and `simulated.Z.prime.t.and.e`, and the truncated triangular distribution object in the variable `my.trun.tri.dist`.
+
+```{r Hypothesis Variance inverse cdf, echo=TRUE}
+## Inverse CDF method
+
+alpha <- 0.1
+degrees.of.freedom <- (length(simulated.Z.prime.Inv.CDF) - 1)
+
+## 1. Sample Variance and true variance
+s.squared.Inv.CDF <- sum((mean(simulated.Z.prime.Inv.CDF) - simulated.Z.prime.Inv.CDF) ^ 2) / degrees.of.freedom
+
+sigma.squared <- my.trun.tri.dist$trun.tri.var
+
+## 2. Test Statistic
+test.statistic <- s.squared.Inv.CDF * degrees.of.freedom / sigma.squared
+
+## 3. Evaluate if statistic falls within bounds
+lower.bound.criteria <- test.statistic >= qchisq(p = alpha / 2, df = degrees.of.freedom)
+upper.bound.criteria <- test.statistic <= qchisq(p = 1 - alpha / 2, df = degrees.of.freedom)
+
+## 4. Conclude:
+print(paste(
+  "With a significance level of 0.1, we ",
+  if (lower.bound.criteria & upper.bound.criteria) {
+    "may not reject the null hypothesis"
+  } else {
+    "may reject the null hypothesis"
+  },
+  sep = ""))
+
+```
+
+Effectively, via the inverse CDF method we generate a sample with the same variance as the underlying truncated triangular distribution.
+
+```{r Hypothesis Variance trial error, echo=TRUE}
+## Trial and Error
+
+degrees.of.freedom <- (length(simulated.Z.prime.t.and.e) - 1)
+
+## 1. Sample Variance
+s.squared.t.and.e <- sum((mean(simulated.Z.prime.t.and.e) - simulated.Z.prime.t.and.e) ^ 2) / degrees.of.freedom
+
+## 2. Test Statistic
+test.statistic <- s.squared.t.and.e * degrees.of.freedom / sigma.squared
+
+## 3. Evaluate if statistic falls within bounds
+lower.bound.criteria <- test.statistic >= qchisq(p = alpha / 2, df = degrees.of.freedom)
+upper.bound.criteria <- test.statistic <= qchisq(p = 1 - alpha / 2, df = degrees.of.freedom)
+
+## 4. Conclude:
+print(paste(
+  "With a significance level of 0.1, we ",
+  if (lower.bound.criteria & upper.bound.criteria) {
+    "may not reject the null hypothesis"
+  } else {
+    "may reject the null hypothesis"
+  },
+  sep = ""))
+
+```
+
+Effectively, via the trial and error method we generate a sample with the same variance as the underlying truncated triangular distribution.
+
+We may move on to test for the mean.
+
+## Hypothesis test for mean
+
+Specifically, when testing for mean equivalence using a t-test, we should validate that the sample mean follows a normal distribution. This does not mean that the data should be normally distributed.
+
+This assumption, because of the central limit theorem, should hold up for fairly large datasets like ours. Roughly speaking, this can be assumed of any dataset with over 50 complete observations.
+
+Let's study the mathematical procedure.
+
+We now want to validate that the mean of the sample is the same as that of the distribution (some value $\mu$), we make opposing statements about it.
+
+$$
+  H_{0}:\hat{\mu} = \mu
+$$
+
+$$
+  H_{a}:\hat{\mu} \neq \mu
+$$
+
+We then calculate the sample mean:
+
+$$
+  \bar{X}=\frac{\sum_{i=1}^{n}x_{i}}{n}
+$$
+
+and plug it into the test statistic:
+
+$$
+  \frac{\bar{X}-\mu}{\frac{S}{\sqrt{n}}} \sim t_{n-1}.
+$$
+
+The _alternate hypothesis_ tells us that this is a two-tailed test, meaning we must use both ends of Student's t distribution. We reject $H_{0}$ if the test statistic falls outside the interval bounded by the t inverse CDF evaluated at $1-\frac{\alpha}{2}$ and at $\frac{\alpha}{2}$ with $n-1$ degrees of freedom. This may seem unorthodox, but the most common notation used to reference these bounds is $t_{1-\frac{\alpha}{2},n-1}$ and $t_{\frac{\alpha}{2},n-1}$. 
+
+$$
+  t_{\frac{\alpha}{2},n-1}\leq\frac{\bar{X}-\mu}{\frac{S}{\sqrt{n}}}\leq t_{1-\frac{\alpha}{2},n-1} \Rightarrow \hat{\mu}=\mu
+$$
+
+We shall now implement this in R. Same as with the test for variance, there is no exact method to calculate the inverse CDF of Student's t distribution that we could reasonably implement, and so we must use R's native function to find approximate values.
+
+```{r Hypothesis mean inverse cdf, echo=TRUE}
+## Inverse CDF method
+
+## 1. Sample mean and true mean
+x.bar.Inv.CDF <- mean(simulated.Z.prime.Inv.CDF)
+
+mu <- my.trun.tri.dist$trun.tri.mean
+
+## 2. Test Statistic
+test.statistic <- (x.bar.Inv.CDF - mu) / (sqrt(sigma.squared / length(simulated.Z.prime.Inv.CDF)))
+
+## 3. Evaluate if statistic falls within bounds
+lower.bound.criteria <- test.statistic >= qt(p = alpha / 2, df = degrees.of.freedom)
+upper.bound.criteria <- test.statistic <= qt(p = 1 - alpha / 2, df = degrees.of.freedom)
+
+## 4. Conclude:
+print(paste(
+  "With a significance level of 0.1, we ",
+  if (lower.bound.criteria & upper.bound.criteria) {
+    "may not reject the null hypothesis"
+  } else {
+    "may reject the null hypothesis"
+  },
+  sep = ""))
+```
+
+Effectively, via the inverse CDF method we generate a sample with the same variance as the underlying truncated triangular distribution.
+
+```{r Hypothesis mean inverse cdf, echo=TRUE}
+## Trial and Error
+
+## 1. Sample mean and true mean
+x.bar.t.and.e <- mean(simulated.Z.prime.t.and.e)
+
+mu <- my.trun.tri.dist$trun.tri.mean
+
+## 2. Test Statistic
+test.statistic <- (x.bar.t.and.e - mu) / (sqrt(sigma.squared / length(simulated.Z.prime.t.and.e)))
+
+## 3. Evaluate if statistic falls within bounds
+lower.bound.criteria <- test.statistic >= qt(p = alpha / 2, df = degrees.of.freedom)
+upper.bound.criteria <- test.statistic <= qt(p = 1 - alpha / 2, df = degrees.of.freedom)
+
+## 4. Conclude:
+print(paste(
+  "With a significance level of 0.1, we ",
+  if (lower.bound.criteria & upper.bound.criteria) {
+    "may not reject the null hypothesis"
+  } else {
+    "may reject the null hypothesis"
+  },
+  sep = ""))
+```
+
+Effectively, via the trial and error method we generate a sample with the same variance as the underlying truncated triangular distribution.
+
+We may move on to the goodness of fit test.
 
 ## Kolmogorov-Smirnov Test
 
