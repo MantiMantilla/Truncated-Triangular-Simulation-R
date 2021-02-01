@@ -448,7 +448,7 @@ print(paste(
 
 Effectively, via the inverse CDF method we generate a sample with the same variance as the underlying truncated triangular distribution.
 
-```{r Hypothesis mean inverse cdf, echo=TRUE}
+```{r Hypothesis mean trial and error, echo=TRUE}
 ## Trial and Error
 
 ## 1. Sample mean and true mean
