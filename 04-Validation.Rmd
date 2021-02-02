@@ -576,6 +576,8 @@ print(paste(
   sep = ""))
 ```
 
+Now for trial and error.
+
 ```{r Chi square goodness t and e, echo=TRUE}
 ## Trial and Error
 
@@ -602,7 +604,7 @@ print(paste(
 
 ```
 
-Effectively, it would seem that both our procedures for generating a sample from the truncated triangular distribution were succesful. Let us move on to a more well suited test for our scenario.
+Effectively, it would seem that both our procedures for generating a sample from the truncated triangular distribution were succesful. Let us move on to a more well suited test for continuous distributions.
 
 ### Kolmogorov-Smirnov Test
 
@@ -630,4 +632,4 @@ The procedure seems fairly straight forward, except for the part where we calcul
 
 Keep in mind that these tests all have their respective counterparts wherin a comparison is made not between a dataset and a distribution but between datasets, meaning we could also ask ourselves whether or not both methods for simulating a probability density function produce similar samples in terms of variance, mean, and goodness of fit.
 
-Notice also that we could have used a much more restrictive level of significance. In fact, the smallest p-value among all tests could yield us an $\alpha$ for which all tests would still pass and make our reasearch mush more significant, but such is considered a bad practice. Remember the term _p-hacking_ for future reference and frown upon anyone who abuses statistics in this fashion.
+Notice also that we could have used a much more restrictive level of significance. In fact, the smallest p-value among all tests could yield us an $\alpha$ for which all tests would still pass and make our reasearch much more significant, but such is considered a bad practice. Remember the term _p-hacking_ for future reference and frown upon anyone who abuses statistics in this fashion.
