@@ -5,26 +5,26 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5 Validation | Simulating the Truncated Triangular Distribution</title>
-  <meta name="description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5 Validation | Simulating the Truncated Triangular Distribution" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta property="og:description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="github-repo" content="MantiMantilla/Truncated-Triangular-Simulation-R" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="5 Validation | Simulating the Truncated Triangular Distribution" />
   
-  <meta name="twitter:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="twitter:description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   
 
-<meta name="author" content="Alejandro Mantilla" />
+<meta name="author" content="Alejandro Mantilla, Data Scientist and Engineer" />
 
 
-<meta name="date" content="2021-02-01" />
+<meta name="date" content="2021-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -173,8 +173,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5" data-path="validation.html"><a href="validation.html"><i class="fa fa-check"></i><b>5</b> Validation</a><ul>
 <li class="chapter" data-level="5.1" data-path="validation.html"><a href="validation.html#hypothesis-test-for-variance"><i class="fa fa-check"></i><b>5.1</b> Hypothesis test for Variance</a></li>
 <li class="chapter" data-level="5.2" data-path="validation.html"><a href="validation.html#hypothesis-test-for-mean"><i class="fa fa-check"></i><b>5.2</b> Hypothesis test for mean</a></li>
-<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3</b> Kolmogorov-Smirnov Test</a></li>
-<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.4</b> Chi-Square Test</a></li>
+<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>5.3</b> Goodness of Fit Tests</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.3.1</b> Chi-Square Test</a></li>
+<li class="chapter" data-level="5.3.2" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3.2</b> Kolmogorov-Smirnov Test</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#further-analysis"><i class="fa fa-check"></i><b>5.4</b> Further Analysis</a></li>
 </ul></li>
 </ul>
 
@@ -203,7 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">5.1</span> Hypothesis test for Variance</h2>
 <p>Specifically, when testing for variance equivalence using a Chi-Square (<span class="math inline">\(\chi^{2}\)</span>) test, we should validate that the sample variance follows a <span class="math inline">\(\chi^{2}\)</span> distribution.</p>
 <p>This usually isn’t the case but to the detriment that we introduce some uncertainty, the condition can be assumed if the distribution of the data roughly ressembles a normal distribution and the sample size is big enough (our sample size is 10000, no need to worry there).</p>
-<p>If we didn’t know that our data follows a triangular distribution this could be a fairly save assumption, but because that really isn’t the case, more advanced techniques like bootstraping should be used while performing this test.</p>
+<p>If we didn’t know that our data follows a triangular distribution this could be a fairly save assumption, but because that really isn’t the case, more advanced techniques like bootstraping should be used while performing this test. Such is left as an excercise to the reader.</p>
 <p>Let’s study the mathematical procedure.</p>
 <p>Since we want to validate that the variance of the sample is the same as that of the distribution (some value <span class="math inline">\(\sigma^{2}\)</span>), we make opposing statements about it. We call these statements our <em>null hypothesis</em> and our <em>alternate hypothesis</em>. In the end, we should be able to say, for some certainty, whether or not we may reject the <em>null hypothesis</em>.</p>
 <p><span class="math display">\[
@@ -358,11 +361,143 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Effectively, via the trial and error method we generate a sample with the same mean as the underlying truncated triangular distribution.</p>
 <p>We may move on to the goodness of fit tests.</p>
 </div>
-<div id="kolmogorov-smirnov-test" class="section level2">
-<h2><span class="header-section-number">5.3</span> Kolmogorov-Smirnov Test</h2>
+<div id="goodness-of-fit-tests" class="section level2">
+<h2><span class="header-section-number">5.3</span> Goodness of Fit Tests</h2>
+<p>Goodness of fit tests, for our purposes, serve as a means of validating paired statements about the distribution of our data. Specifically, our <em>null hypothesis</em> would state that the sampled random variable follows a PDF with its respective estimated parameters while our <em>alternate hypothesis</em> tells us exactly the opposite.</p>
+<p>In terms of hypothesis:</p>
+<p><span class="math display">\[
+  H_{0}: \hat{f}(x) = f(x)
+\]</span>
+<span class="math display">\[
+  H_{a}: \hat{f}(x) \neq f(x) \Leftrightarrow \neg H_{0}.
+\]</span></p>
+<p>Multiple tests have been devised for goodness of fit, each with their own strengths. It is up to us to determine the most sound method.</p>
+<div id="chi-square-test" class="section level3">
+<h3><span class="header-section-number">5.3.1</span> Chi-Square Test</h3>
+<p>The <span class="math inline">\(\chi^2\)</span> test is particularly useful when fitting data with a discrete distributions of moderate size, though the procedure can be extended to continuous distributions by <em>binning</em> the domain into intervals or classes of equal probability. For samples as large as ours this approach is perhaps not well suited since it is highly likely that the test will fail for most distributions since we require many bins to split the distribution and the probability of each becomes very narrow. Nonetheless, the procedure is enriching.</p>
+<ol style="list-style-type: decimal">
+<li>Estimate the parameters of the distributions you suspect the data shuld follow. We will use the parameters of the distribution we want the sample to resemble instead (Those of the truncated triangular distriburtion).</li>
+</ol>
+<blockquote>
+<p>Let <span class="math inline">\(X \sim f(x)=Triangular(L,U,M)\)</span> and <span class="math inline">\(Z \sim h(x) = f(z| a &lt; X \leq b)\)</span></p>
+</blockquote>
+<p>where <span class="math inline">\(L = 2\)</span>, <span class="math inline">\(U = 9\)</span>, <span class="math inline">\(M = 7\)</span>, <span class="math inline">\(a = 3\)</span>, and <span class="math inline">\(b = 8\)</span>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Estimate the amount of classes or bins to categorize the continuous distribution. Often, for large datasets, it is recommended to pick <span class="math inline">\(\frac{\sqrt{n}}{5} \leq k \leq \sqrt{n}\)</span>.</li>
+</ol>
+<p><span class="math display">\[
+  20 \leq k \leq 100.
+\]</span></p>
+<p>We will take <span class="math inline">\(k\)</span> to be 100.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Calculate the probability that every class should have (<span class="math inline">\(p=1/k\)</span>) and find the bounds for each class with said probability.</li>
+</ol>
+<blockquote>
+<p>Let H(x) be the CDF to the random variable Z.</p>
+</blockquote>
+<p>We define the lower and upper bounds of each class <span class="math inline">\(i\in \{ 1,\cdots, k\}\)</span> to be <span class="math inline">\(l_{i}\)</span> and <span class="math inline">\(u_{i}\)</span>. A value <span class="math inline">\(z\)</span> is said to belong to class <span class="math inline">\(i\)</span> if <span class="math inline">\(l_{i} \leq z &lt; u_{i}\)</span></p>
+<p><span class="math display">\[
+  l_{i} = H^{-1}(p(i-1)), \ u_{i} = H^{-1}(p*i)
+\]</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Once all classes have had their bounds calculated, we may count how many members of the random sample belong to each class (<span class="math inline">\(o_{i}\)</span>, observed frequency), and how many members we expected to beling according to its assigned probability (<span class="math inline">\(e_{i} = p*n\)</span>, expected frequency).</p></li>
+<li><p>We ma now calculate the test statistic</p></li>
+</ol>
+<p><span class="math display">\[
+  \sum_{i=1}^{k}\frac{(o_{i}-e_{i})^{2}}{e_{i}} \sim \chi^{2}_{k-r-1}
+\]</span></p>
+<p>Notice how the statistic follows a <span class="math inline">\(\chi^{2}\)</span> distribution with <span class="math inline">\(k-r-1\)</span> degrees of freedom. Where <span class="math inline">\(k\)</span> is the number of classes and <span class="math inline">\(r\)</span> is the amount of parameters of the distribution (5 for the truncated triangular).</p>
+<ol start="6" style="list-style-type: decimal">
+<li>Once again, consider you level of significance and evaluate the critical value after which the <em>null hypothesis</em> should be rejected. This is a right tail test.</li>
+</ol>
+<p><span class="math display">\[
+  \sum_{i=1}^{k}\frac{(o_{i}-e_{i})^{2}}{e_{i}}\leq \chi^{2}_{1-\alpha,k-r-1} \Rightarrow \hat{h}(z)=h(z)
+\]</span></p>
+<p>Let’s see how we could go about doing this in R. First, for the inverse CDF method.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="validation.html#cb29-1"></a><span class="co">## Inverse CDF sample</span></span>
+<span id="cb29-2"><a href="validation.html#cb29-2"></a></span>
+<span id="cb29-3"><a href="validation.html#cb29-3"></a><span class="co">## Find the intervals for each class i in {1, ..., k}</span></span>
+<span id="cb29-4"><a href="validation.html#cb29-4"></a>set.<span class="fl">1.</span>to.k &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">100</span></span>
+<span id="cb29-5"><a href="validation.html#cb29-5"></a>p &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">/</span><span class="dv">100</span></span>
+<span id="cb29-6"><a href="validation.html#cb29-6"></a>l_i &lt;-<span class="st"> </span><span class="kw">sapply</span>(p <span class="op">*</span><span class="st"> </span>(set.<span class="fl">1.</span>to.k <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), my.trun.tri.dist<span class="op">$</span>inverse.cdf)</span>
+<span id="cb29-7"><a href="validation.html#cb29-7"></a>u_i &lt;-<span class="st"> </span><span class="kw">sapply</span>(p <span class="op">*</span><span class="st"> </span>set.<span class="fl">1.</span>to.k, my.trun.tri.dist<span class="op">$</span>inverse.cdf)</span>
+<span id="cb29-8"><a href="validation.html#cb29-8"></a></span>
+<span id="cb29-9"><a href="validation.html#cb29-9"></a><span class="co">## Find the observed frequency of every class</span></span>
+<span id="cb29-10"><a href="validation.html#cb29-10"></a>e_i &lt;-</span>
+<span id="cb29-11"><a href="validation.html#cb29-11"></a><span class="st">  </span><span class="kw">sapply</span>(set.<span class="fl">1.</span>to.k, <span class="cf">function</span>(i) {</span>
+<span id="cb29-12"><a href="validation.html#cb29-12"></a>    <span class="kw">sum</span>(simulated.Z.prime.Inv.CDF <span class="op">&gt;=</span><span class="st"> </span>l_i[i]</span>
+<span id="cb29-13"><a href="validation.html#cb29-13"></a>      <span class="op">&amp;</span><span class="st"> </span>simulated.Z.prime.Inv.CDF <span class="op">&lt;=</span><span class="st"> </span>u_i[i]</span>
+<span id="cb29-14"><a href="validation.html#cb29-14"></a>    )</span>
+<span id="cb29-15"><a href="validation.html#cb29-15"></a>  })</span>
+<span id="cb29-16"><a href="validation.html#cb29-16"></a></span>
+<span id="cb29-17"><a href="validation.html#cb29-17"></a><span class="co">## Find the expected frequency</span></span>
+<span id="cb29-18"><a href="validation.html#cb29-18"></a>o_i &lt;-<span class="st"> </span>p <span class="op">*</span><span class="st"> </span><span class="dv">10000</span></span>
+<span id="cb29-19"><a href="validation.html#cb29-19"></a></span>
+<span id="cb29-20"><a href="validation.html#cb29-20"></a><span class="co">## Calculate the test statistic</span></span>
+<span id="cb29-21"><a href="validation.html#cb29-21"></a>test.statistic &lt;-<span class="st"> </span><span class="kw">sum</span>(((o_i <span class="op">-</span><span class="st"> </span>e_i) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>e_i)</span>
+<span id="cb29-22"><a href="validation.html#cb29-22"></a></span>
+<span id="cb29-23"><a href="validation.html#cb29-23"></a><span class="co">## Calculate the Chi Square ritical value</span></span>
+<span id="cb29-24"><a href="validation.html#cb29-24"></a>critical.value &lt;-<span class="st"> </span><span class="kw">qchisq</span>(<span class="dv">1</span><span class="op">-</span>alpha, <span class="dt">df =</span> <span class="dv">100</span> <span class="op">-</span><span class="st"> </span><span class="dv">5</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb29-25"><a href="validation.html#cb29-25"></a></span>
+<span id="cb29-26"><a href="validation.html#cb29-26"></a><span class="co">## Conclude</span></span>
+<span id="cb29-27"><a href="validation.html#cb29-27"></a><span class="kw">print</span>(<span class="kw">paste</span>(</span>
+<span id="cb29-28"><a href="validation.html#cb29-28"></a>  <span class="st">&quot;With a significance level of 0.1, we &quot;</span>,</span>
+<span id="cb29-29"><a href="validation.html#cb29-29"></a>  <span class="cf">if</span> (test.statistic <span class="op">&lt;=</span><span class="st"> </span>critical.value) {</span>
+<span id="cb29-30"><a href="validation.html#cb29-30"></a>    <span class="st">&quot;may not reject the null hypothesis&quot;</span></span>
+<span id="cb29-31"><a href="validation.html#cb29-31"></a>  } <span class="cf">else</span> {</span>
+<span id="cb29-32"><a href="validation.html#cb29-32"></a>    <span class="st">&quot;may reject the null hypothesis&quot;</span></span>
+<span id="cb29-33"><a href="validation.html#cb29-33"></a>  },</span>
+<span id="cb29-34"><a href="validation.html#cb29-34"></a>  <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;With a significance level of 0.1, we may not reject the null hypothesis&quot;</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="validation.html#cb31-1"></a><span class="co">## Trial and Error</span></span>
+<span id="cb31-2"><a href="validation.html#cb31-2"></a></span>
+<span id="cb31-3"><a href="validation.html#cb31-3"></a><span class="co">## Find the observed frequency of every class</span></span>
+<span id="cb31-4"><a href="validation.html#cb31-4"></a>e_i &lt;-</span>
+<span id="cb31-5"><a href="validation.html#cb31-5"></a><span class="st">  </span><span class="kw">sapply</span>(set.<span class="fl">1.</span>to.k, <span class="cf">function</span>(i) {</span>
+<span id="cb31-6"><a href="validation.html#cb31-6"></a>    <span class="kw">sum</span>(simulated.Z.prime.t.and.e <span class="op">&gt;=</span><span class="st"> </span>l_i[i]</span>
+<span id="cb31-7"><a href="validation.html#cb31-7"></a>      <span class="op">&amp;</span><span class="st"> </span>simulated.Z.prime.t.and.e <span class="op">&lt;=</span><span class="st"> </span>u_i[i]</span>
+<span id="cb31-8"><a href="validation.html#cb31-8"></a>    )</span>
+<span id="cb31-9"><a href="validation.html#cb31-9"></a>  })</span>
+<span id="cb31-10"><a href="validation.html#cb31-10"></a></span>
+<span id="cb31-11"><a href="validation.html#cb31-11"></a><span class="co">## Calculate the test statistic</span></span>
+<span id="cb31-12"><a href="validation.html#cb31-12"></a>test.statistic &lt;-<span class="st"> </span><span class="kw">sum</span>(((o_i <span class="op">-</span><span class="st"> </span>e_i) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>e_i)</span>
+<span id="cb31-13"><a href="validation.html#cb31-13"></a></span>
+<span id="cb31-14"><a href="validation.html#cb31-14"></a><span class="co">## Conclude</span></span>
+<span id="cb31-15"><a href="validation.html#cb31-15"></a><span class="kw">print</span>(<span class="kw">paste</span>(</span>
+<span id="cb31-16"><a href="validation.html#cb31-16"></a>  <span class="st">&quot;With a significance level of 0.1, we &quot;</span>,</span>
+<span id="cb31-17"><a href="validation.html#cb31-17"></a>  <span class="cf">if</span> (test.statistic <span class="op">&lt;=</span><span class="st"> </span>critical.value) {</span>
+<span id="cb31-18"><a href="validation.html#cb31-18"></a>    <span class="st">&quot;may not reject the null hypothesis&quot;</span></span>
+<span id="cb31-19"><a href="validation.html#cb31-19"></a>  } <span class="cf">else</span> {</span>
+<span id="cb31-20"><a href="validation.html#cb31-20"></a>    <span class="st">&quot;may reject the null hypothesis&quot;</span></span>
+<span id="cb31-21"><a href="validation.html#cb31-21"></a>  },</span>
+<span id="cb31-22"><a href="validation.html#cb31-22"></a>  <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;With a significance level of 0.1, we may not reject the null hypothesis&quot;</code></pre>
+<p>Effectively, it would seem that both our procedures for generating a sample from the truncated triangular distribution were succesful. Let us move on to a more well suited test for our scenario.</p>
 </div>
-<div id="chi-square-test" class="section level2">
-<h2><span class="header-section-number">5.4</span> Chi-Square Test</h2>
+<div id="kolmogorov-smirnov-test" class="section level3">
+<h3><span class="header-section-number">5.3.2</span> Kolmogorov-Smirnov Test</h3>
+<p>The Komogorov-Smirnov test is more robust for goodness of fit procedures than the <span class="math inline">\(\chi^{2}\)</span> because it allows for samples of any size and it does not require that you split continuous functions into bins or classes, which is undesirable as it introduces a source of error.</p>
+<p>The procedure goes as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>Order the random sample from smalles to largest, without removing duplcates (yields <span class="math inline">\(y_{j}, \forall j\in \{1,\cdots, n \}\)</span>).</p></li>
+<li><p>Calculate the test statistic as follows:</p></li>
+</ol>
+<p><span class="math display">\[
+  D^{+} = \max_{y_{j}, \forall j\in \{1,\cdots, n\}}{\{ j/n - H(y_{j})\}},\ D^{-} = \max_{y_{j}, \forall j\in \{1,\cdots, n\}}{\{ H(y_{j}) - (j-1)/n\}}
+\]</span></p>
+<p><span class="math display">\[
+  D = \max{\{ D^{+}, D^{-}\}}
+\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>If <span class="math inline">\(D\)</span> is greater than the K-S critical value for <span class="math inline">\(\alpha = 0.1\)</span> and <span class="math inline">\(n=10,000\)</span>, reject the <em>null hypothesis</em>.</li>
+</ol>
+<p>The procedure seems fairly straight forward, except for the part where we calculate the K-S critical value. This time, at least in R, you might require some outside resources such as a K-S table or a library that can simulate the statistic with which to compare. We will not implement this procedure in R since we already have evidence that the samples follow the truncated triangular distribution described in previous chapters.</p>
+</div>
+</div>
+<div id="further-analysis" class="section level2">
+<h2><span class="header-section-number">5.4</span> Further Analysis</h2>
+<p>Keep in mind that these tests all have their respective counterparts wherin a comparison is made not between a dataset and a distribution but between datasets, meaning we could also ask ourselves whether or not both methods for simulating a probability density function produce similar samples in terms of variance, mean, and goodness of fit.</p>
+<p>Notice also that we could have used a much more restrictive level of significance. In fact, the smallest p-value among all tests could yield us an <span class="math inline">\(\alpha\)</span> for which all tests would still pass and make our reasearch mush more significant, but such is considered a bad practice. Remember the term <em>p-hacking</em> for future reference and frown upon anyone who abuses statistics in this fashion.</p>
 
 </div>
 </div>

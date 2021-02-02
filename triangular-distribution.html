@@ -5,26 +5,26 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2 Triangular Distribution | Simulating the Truncated Triangular Distribution</title>
-  <meta name="description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2 Triangular Distribution | Simulating the Truncated Triangular Distribution" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta property="og:description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="github-repo" content="MantiMantilla/Truncated-Triangular-Simulation-R" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="2 Triangular Distribution | Simulating the Truncated Triangular Distribution" />
   
-  <meta name="twitter:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="twitter:description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   
 
-<meta name="author" content="Alejandro Mantilla" />
+<meta name="author" content="Alejandro Mantilla, Data Scientist and Engineer" />
 
 
-<meta name="date" content="2021-02-01" />
+<meta name="date" content="2021-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -173,8 +173,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5" data-path="validation.html"><a href="validation.html"><i class="fa fa-check"></i><b>5</b> Validation</a><ul>
 <li class="chapter" data-level="5.1" data-path="validation.html"><a href="validation.html#hypothesis-test-for-variance"><i class="fa fa-check"></i><b>5.1</b> Hypothesis test for Variance</a></li>
 <li class="chapter" data-level="5.2" data-path="validation.html"><a href="validation.html#hypothesis-test-for-mean"><i class="fa fa-check"></i><b>5.2</b> Hypothesis test for mean</a></li>
-<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3</b> Kolmogorov-Smirnov Test</a></li>
-<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.4</b> Chi-Square Test</a></li>
+<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>5.3</b> Goodness of Fit Tests</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.3.1</b> Chi-Square Test</a></li>
+<li class="chapter" data-level="5.3.2" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3.2</b> Kolmogorov-Smirnov Test</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#further-analysis"><i class="fa fa-check"></i><b>5.4</b> Further Analysis</a></li>
 </ul></li>
 </ul>
 
@@ -197,21 +200,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">2</span> Triangular Distribution</h1>
 <div id="distributions" class="section level2">
 <h2><span class="header-section-number">2.1</span> Distributions</h2>
-<p>Probability density functions describe how likely it is for a continuous random variable <span class="math inline">\(X\)</span> to fall within some region of its domain. For any single point the probability is cero but at intervals we can calculate the integral of the PDF and find the corresponding probability. Consider the following conventions:</p>
+<p>Probability density functions describe how likely it is for a continuous random variable <span class="math inline">\(Y\)</span> to fall within some region of its domain. For any single point the probability is cero but at intervals we can calculate the integral of the PDF and find the corresponding probability. Consider the following conventions:</p>
 <blockquote>
-<p>Let <span class="math inline">\(X\)</span> be a random variable with distribution <span class="math inline">\(f(x)\)</span></p>
+<p>Let <span class="math inline">\(Y\)</span> be a random variable with distribution <span class="math inline">\(f(y)\)</span></p>
 </blockquote>
 <p>This way of defining random variables lets on some basic information about how it may behave but is lengthy and unnecessary.</p>
 <blockquote>
-<p>Let <span class="math inline">\(X\sim f(x)\)</span></p>
+<p>Let <span class="math inline">\(Y\sim f(y)\)</span></p>
 </blockquote>
 <p>Much better.</p>
 <blockquote>
-<p>Let <span class="math inline">\(X\sim f(x) = \frac{e^{-\frac{1}{2}\left( \frac{x-\mu}{\sigma}\right)^{2}}}{\sigma \sqrt{2\pi}}\)</span></p>
+<p>Let <span class="math inline">\(Y\sim f(y) = \frac{e^{-\frac{1}{2}\left( \frac{y-\mu}{\sigma}\right)^{2}}}{\sigma \sqrt{2\pi}}\)</span></p>
 </blockquote>
 <p>A PDF will sometimes be defined for the entire real number line in a single expression like the ubiquitous normal distribution, while others require you to write piecewise functions such as the triangular distribution.</p>
 <blockquote>
-<p>Let <span class="math inline">\(X\sim Norm(\mu, \sigma^{2})\)</span> and <span class="math inline">\(Y\sim Triangular(L,U,M)\)</span></p>
+<p>Let <span class="math inline">\(Y\sim Norm(\mu, \sigma^{2})\)</span> and <span class="math inline">\(X\sim Triangular(L,U,M)\)</span></p>
 </blockquote>
 <p>We use a shorthand notation for widely used distributions that would usually take too much effort to remember or write out.</p>
 </div>

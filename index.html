@@ -5,26 +5,26 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Simulating the Truncated Triangular Distribution</title>
-  <meta name="description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Simulating the Truncated Triangular Distribution" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta property="og:description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="github-repo" content="MantiMantilla/Truncated-Triangular-Simulation-R" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Simulating the Truncated Triangular Distribution" />
   
-  <meta name="twitter:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="twitter:description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   
 
-<meta name="author" content="Alejandro Mantilla" />
+<meta name="author" content="Alejandro Mantilla, Data Scientist and Engineer" />
 
 
-<meta name="date" content="2021-02-01" />
+<meta name="date" content="2021-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -173,8 +173,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5" data-path="validation.html"><a href="validation.html"><i class="fa fa-check"></i><b>5</b> Validation</a><ul>
 <li class="chapter" data-level="5.1" data-path="validation.html"><a href="validation.html#hypothesis-test-for-variance"><i class="fa fa-check"></i><b>5.1</b> Hypothesis test for Variance</a></li>
 <li class="chapter" data-level="5.2" data-path="validation.html"><a href="validation.html#hypothesis-test-for-mean"><i class="fa fa-check"></i><b>5.2</b> Hypothesis test for mean</a></li>
-<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3</b> Kolmogorov-Smirnov Test</a></li>
-<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.4</b> Chi-Square Test</a></li>
+<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>5.3</b> Goodness of Fit Tests</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.3.1</b> Chi-Square Test</a></li>
+<li class="chapter" data-level="5.3.2" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3.2</b> Kolmogorov-Smirnov Test</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#further-analysis"><i class="fa fa-check"></i><b>5.4</b> Further Analysis</a></li>
 </ul></li>
 </ul>
 
@@ -195,8 +198,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="header">
 <h1 class="title">Simulating the Truncated Triangular Distribution</h1>
-<p class="author"><em>Alejandro Mantilla</em></p>
-<p class="date"><em>2021-02-01</em></p>
+<p class="author"><em>Alejandro Mantilla, Data Scientist and Engineer</em></p>
+<p class="date"><em>2021-02-02</em></p>
 </div>
 <div id="intro" class="section level1">
 <h1><span class="header-section-number">1</span> Intro</h1>
@@ -217,9 +220,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="license-author-and-acknowledgements" class="section level2">
 <h2><span class="header-section-number">1.4</span> License, Author, and Acknowledgements</h2>
 <p><a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a></p>
-<p>Copyright (c) 2021 Alejandro Mantilla</p>
-<p>Alejandro Mantilla</p>
-<p>Data Scientist and Engineer</p>
+<p>Copyright (c) 2021 <a href="https://mantimantilla.github.io/">Alejandro Mantilla</a></p>
 <p>Bogotá, Colombia</p>
 <p>Special thanks to Alfaima Solano from Universidad de los Andes for their feedback on this project.</p>
 

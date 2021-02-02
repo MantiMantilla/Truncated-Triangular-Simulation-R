@@ -34,5 +34,7 @@ trial-and-error
 validation
 hypothesis-test-for-variance
 hypothesis-test-for-mean
-kolmogorov-smirnov-test
+goodness-of-fit-tests
 chi-square-test
+kolmogorov-smirnov-test
+further-analysis

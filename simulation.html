@@ -5,26 +5,26 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4 Simulation | Simulating the Truncated Triangular Distribution</title>
-  <meta name="description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4 Simulation | Simulating the Truncated Triangular Distribution" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta property="og:description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   <meta name="github-repo" content="MantiMantilla/Truncated-Triangular-Simulation-R" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="4 Simulation | Simulating the Truncated Triangular Distribution" />
   
-  <meta name="twitter:description" content="THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
+  <meta name="twitter:description" content="This documentation pertains to the implementation of a Monte Carlo simulation script written in base R." />
   
 
-<meta name="author" content="Alejandro Mantilla" />
+<meta name="author" content="Alejandro Mantilla, Data Scientist and Engineer" />
 
 
-<meta name="date" content="2021-02-01" />
+<meta name="date" content="2021-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -173,8 +173,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5" data-path="validation.html"><a href="validation.html"><i class="fa fa-check"></i><b>5</b> Validation</a><ul>
 <li class="chapter" data-level="5.1" data-path="validation.html"><a href="validation.html#hypothesis-test-for-variance"><i class="fa fa-check"></i><b>5.1</b> Hypothesis test for Variance</a></li>
 <li class="chapter" data-level="5.2" data-path="validation.html"><a href="validation.html#hypothesis-test-for-mean"><i class="fa fa-check"></i><b>5.2</b> Hypothesis test for mean</a></li>
-<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3</b> Kolmogorov-Smirnov Test</a></li>
-<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.4</b> Chi-Square Test</a></li>
+<li class="chapter" data-level="5.3" data-path="validation.html"><a href="validation.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>5.3</b> Goodness of Fit Tests</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="validation.html"><a href="validation.html#chi-square-test"><i class="fa fa-check"></i><b>5.3.1</b> Chi-Square Test</a></li>
+<li class="chapter" data-level="5.3.2" data-path="validation.html"><a href="validation.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.3.2</b> Kolmogorov-Smirnov Test</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="validation.html"><a href="validation.html#further-analysis"><i class="fa fa-check"></i><b>5.4</b> Further Analysis</a></li>
 </ul></li>
 </ul>
 
@@ -195,7 +198,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="simulation" class="section level1">
 <h1><span class="header-section-number">4</span> Simulation</h1>
-<p>So far we have designed two constructor functions, <code>generate.triangular()</code> and <code>generate.truncated.triangular()</code>, with which we may create triangular distributions and truncated triangular distributions respectively. Let’s move one to some code the actually does something. Say, for example, that the truncated triangular distribution is how you chose for a random variable to behave, how long it takes for a crop to grow or the amount of rain water of a particular time period. Being able to randomly sample instances of this variable without having to wait for rainfall or for crops to grow and study how a larger system behaves as a function of this random variable could be highly beneficial and is, in fact, the basis of Monte Carlo simulation.</p>
+<p>So far we have designed two constructor functions, <code>generate.triangular()</code> and <code>generate.truncated.triangular()</code>, with which we may create triangular distributions and truncated triangular distributions respectively. Let’s move one to some code the actually does something. Say, for example, that the truncated triangular distribution is how you chose for a random variable to behave, how long it takes for a crop to grow or the amount of rain water of a particular time period. Being able to randomly sample instances of this variable without having to wait for rainfall or for crops to grow and study how a larger system behaves as a function of this random variable could be highly beneficial and is, in fact, the premise of Monte Carlo simulation.</p>
 <p>Some definitions for this section:</p>
 <blockquote>
 <p>Let <span class="math inline">\(Z \sim f(x) = Triangular(2, 9, 7)\)</span> and <span class="math inline">\(Z&#39; \sim f(x|3 &lt; X \leq 8)=h(x)\)</span></p>
