@@ -449,6 +449,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb29-33"><a href="validation.html#cb29-33"></a>  },</span>
 <span id="cb29-34"><a href="validation.html#cb29-34"></a>  <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;With a significance level of 0.1, we may not reject the null hypothesis&quot;</code></pre>
+<p>Now for trial and error.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="validation.html#cb31-1"></a><span class="co">## Trial and Error</span></span>
 <span id="cb31-2"><a href="validation.html#cb31-2"></a></span>
 <span id="cb31-3"><a href="validation.html#cb31-3"></a><span class="co">## Find the observed frequency of every class</span></span>
@@ -472,7 +473,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb31-21"><a href="validation.html#cb31-21"></a>  },</span>
 <span id="cb31-22"><a href="validation.html#cb31-22"></a>  <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;With a significance level of 0.1, we may not reject the null hypothesis&quot;</code></pre>
-<p>Effectively, it would seem that both our procedures for generating a sample from the truncated triangular distribution were succesful. Let us move on to a more well suited test for our scenario.</p>
+<p>Effectively, it would seem that both our procedures for generating a sample from the truncated triangular distribution were succesful. Let us move on to a more well suited test for continuous distributions.</p>
 </div>
 <div id="kolmogorov-smirnov-test" class="section level3">
 <h3><span class="header-section-number">5.3.2</span> Kolmogorov-Smirnov Test</h3>
@@ -497,7 +498,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="further-analysis" class="section level2">
 <h2><span class="header-section-number">5.4</span> Further Analysis</h2>
 <p>Keep in mind that these tests all have their respective counterparts wherin a comparison is made not between a dataset and a distribution but between datasets, meaning we could also ask ourselves whether or not both methods for simulating a probability density function produce similar samples in terms of variance, mean, and goodness of fit.</p>
-<p>Notice also that we could have used a much more restrictive level of significance. In fact, the smallest p-value among all tests could yield us an <span class="math inline">\(\alpha\)</span> for which all tests would still pass and make our reasearch mush more significant, but such is considered a bad practice. Remember the term <em>p-hacking</em> for future reference and frown upon anyone who abuses statistics in this fashion.</p>
+<p>Notice also that we could have used a much more restrictive level of significance. In fact, the smallest p-value among all tests could yield us an <span class="math inline">\(\alpha\)</span> for which all tests would still pass and make our reasearch much more significant, but such is considered a bad practice. Remember the term <em>p-hacking</em> for future reference and frown upon anyone who abuses statistics in this fashion.</p>
 
 </div>
 </div>
