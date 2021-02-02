@@ -1,12 +1,12 @@
 ---
 title: "Simulating the Truncated Triangular Distribution"
-author: "Alejandro Mantilla"
+author: "Alejandro Mantilla, Data Scientist and Engineer"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
 github-repo: MantiMantilla/Truncated-Triangular-Simulation-R
-description: "THis documentation pertains to the implementation of a Monte Carlo simulation script written in base R."
+description: "This documentation pertains to the implementation of a Monte Carlo simulation script written in base R."
 ---
 
 ```{r setup, include=FALSE}
@@ -35,11 +35,7 @@ All errors are my own. All feedback is welcome.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Copyright (c) 2021 Alejandro Mantilla
-
-Alejandro Mantilla
-
-Data Scientist and Engineer
+Copyright (c) 2021 [Alejandro Mantilla](https://mantimantilla.github.io/)
 
 Bogotá, Colombia
 

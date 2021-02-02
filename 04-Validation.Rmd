@@ -283,7 +283,7 @@ Specifically, when testing for variance equivalence using a Chi-Square ($\chi^{2
 
 This usually isn't the case but to the detriment that we introduce some uncertainty, the condition can be assumed if the distribution of the data roughly ressembles a normal distribution and the sample size is big enough (our sample size is 10000, no need to worry there).
 
-If we didn't know that our data follows a triangular distribution this could be a fairly save assumption, but because that really isn't the case, more advanced techniques like bootstraping should be used while performing this test.
+If we didn't know that our data follows a triangular distribution this could be a fairly save assumption, but because that really isn't the case, more advanced techniques like bootstraping should be used while performing this test. Such is left as an excercise to the reader.
 
 Let's study the mathematical procedure.
 
@@ -478,10 +478,156 @@ Effectively, via the trial and error method we generate a sample with the same m
 
 We may move on to the goodness of fit tests.
 
-## Kolmogorov-Smirnov Test
+## Goodness of Fit Tests
 
+Goodness of fit tests, for our purposes, serve as a means of validating paired statements about the distribution of our data. Specifically, our _null hypothesis_ would state that the sampled random variable follows a PDF with its respective estimated parameters while our _alternate hypothesis_ tells us exactly the opposite.
 
+In terms of hypothesis:
 
-## Chi-Square Test
+$$
+  H_{0}: \hat{f}(x) = f(x)
+$$
+$$
+  H_{a}: \hat{f}(x) \neq f(x) \Leftrightarrow \neg H_{0}.
+$$
 
+Multiple tests have been devised for goodness of fit, each with their own strengths. It is up to us to determine the most sound method.
 
+### Chi-Square Test
+
+The $\chi^2$ test is particularly useful when fitting data with a discrete distributions of moderate size, though the procedure can be extended to continuous distributions by _binning_ the domain into intervals or classes of equal probability. For samples as large as ours this approach is perhaps not well suited since it is highly likely that the test will fail for most distributions since we require many bins to split the distribution and the probability of each becomes very narrow. Nonetheless, the procedure is enriching.
+
+1. Estimate the parameters of the distributions you suspect the data shuld follow. We will use the parameters of the distribution we want the sample to resemble instead (Those of the truncated triangular distriburtion).
+
+> Let $X \sim f(x)=Triangular(L,U,M)$ and $Z \sim  h(x) = f(z| a < X \leq b)$
+
+where $L = 2$, $U = 9$, $M = 7$, $a = 3$, and $b = 8$.
+
+2. Estimate the amount of classes or bins to categorize the continuous distribution. Often, for large datasets, it is recommended to pick $\frac{\sqrt{n}}{5} \leq k \leq \sqrt{n}$.
+
+$$
+  20 \leq k \leq 100.
+$$
+
+We will take $k$ to be 100.
+
+3. Calculate the probability that every class should have ($p=1/k$) and find the bounds for each class with said probability.
+
+> Let H(x) be the CDF to the random variable Z.
+
+We define the lower and upper bounds of each class $i\in \{ 1,\cdots, k\}$ to be $l_{i}$ and $u_{i}$. A value $z$ is said to belong to class $i$ if $l_{i} \leq z < u_{i}$ 
+
+$$
+  l_{i} = H^{-1}(p(i-1)), \ u_{i} = H^{-1}(p*i)
+$$
+
+4. Once all classes have had their bounds calculated, we may count how many members of the random sample belong to each class ($o_{i}$, observed frequency), and how many members we expected to beling according to its assigned probability ($e_{i} = p*n$, expected frequency).
+
+5. We ma now calculate the test statistic
+
+$$
+  \sum_{i=1}^{k}\frac{(o_{i}-e_{i})^{2}}{e_{i}} \sim \chi^{2}_{k-r-1}
+$$
+
+Notice how the statistic follows a $\chi^{2}$ distribution with $k-r-1$ degrees of freedom. Where $k$ is the number of classes and $r$ is the amount of parameters of the distribution (5 for the truncated triangular).
+
+6. Once again, consider you level of significance and evaluate the critical value after which the _null hypothesis_ should be rejected. This is a right tail test.
+
+$$
+  \sum_{i=1}^{k}\frac{(o_{i}-e_{i})^{2}}{e_{i}}\leq \chi^{2}_{1-\alpha,k-r-1} \Rightarrow \hat{h}(z)=h(z)
+$$
+
+Let's see how we could go about doing this in R. First, for the inverse CDF method.
+
+```{r Chi square goodness inv cdf, echo=TRUE}
+## Inverse CDF sample
+
+## Find the intervals for each class i in {1, ..., k}
+set.1.to.k <- 1:100
+p <- 1/100
+l_i <- sapply(p * (set.1.to.k - 1), my.trun.tri.dist$inverse.cdf)
+u_i <- sapply(p * set.1.to.k, my.trun.tri.dist$inverse.cdf)
+
+## Find the observed frequency of every class
+e_i <-
+  sapply(set.1.to.k, function(i) {
+    sum(simulated.Z.prime.Inv.CDF >= l_i[i]
+      & simulated.Z.prime.Inv.CDF <= u_i[i]
+    )
+  })
+
+## Find the expected frequency
+o_i <- p * 10000
+
+## Calculate the test statistic
+test.statistic <- sum(((o_i - e_i) ^ 2) / e_i)
+
+## Calculate the Chi Square ritical value
+critical.value <- qchisq(1-alpha, df = 100 - 5 - 1)
+
+## Conclude
+print(paste(
+  "With a significance level of 0.1, we ",
+  if (test.statistic <= critical.value) {
+    "may not reject the null hypothesis"
+  } else {
+    "may reject the null hypothesis"
+  },
+  sep = ""))
+```
+
+```{r Chi square goodness t and e, echo=TRUE}
+## Trial and Error
+
+## Find the observed frequency of every class
+e_i <-
+  sapply(set.1.to.k, function(i) {
+    sum(simulated.Z.prime.t.and.e >= l_i[i]
+      & simulated.Z.prime.t.and.e <= u_i[i]
+    )
+  })
+
+## Calculate the test statistic
+test.statistic <- sum(((o_i - e_i) ^ 2) / e_i)
+
+## Conclude
+print(paste(
+  "With a significance level of 0.1, we ",
+  if (test.statistic <= critical.value) {
+    "may not reject the null hypothesis"
+  } else {
+    "may reject the null hypothesis"
+  },
+  sep = ""))
+
+```
+
+Effectively, it would seem that both our procedures for generating a sample from the truncated triangular distribution were succesful. Let us move on to a more well suited test for our scenario.
+
+### Kolmogorov-Smirnov Test
+
+The Komogorov-Smirnov test is more robust for goodness of fit procedures than the $\chi^{2}$ because it allows for samples of any size and it does not require that you split continuous functions into bins or classes, which is undesirable as it introduces a source of error.
+
+The procedure goes as follows:
+
+1. Order the random sample from smalles to largest, without removing duplcates (yields $y_{j}, \forall j\in \{1,\cdots, n \}$).
+
+2. Calculate the test statistic as follows:
+
+$$
+  D^{+} = \max_{y_{j}, \forall j\in \{1,\cdots, n\}}{\{ j/n - H(y_{j})\}},\ D^{-} = \max_{y_{j}, \forall j\in \{1,\cdots, n\}}{\{ H(y_{j}) - (j-1)/n\}}
+$$
+
+$$
+  D = \max{\{ D^{+}, D^{-}\}}
+$$
+
+3. If $D$ is greater than the K-S critical value for $\alpha = 0.1$ and $n=10,000$, reject the _null hypothesis_.
+
+The procedure seems fairly straight forward, except for the part where we calculate the K-S critical value. This time, at least in R, you might require some outside resources such as a K-S table or a library that can simulate the statistic with which to compare. We will not implement this procedure in R since we already have evidence that the samples follow the truncated triangular distribution described in previous chapters.
+
+## Further Analysis
+
+Keep in mind that these tests all have their respective counterparts wherin a comparison is made not between a dataset and a distribution but between datasets, meaning we could also ask ourselves whether or not both methods for simulating a probability density function produce similar samples in terms of variance, mean, and goodness of fit.
+
+Notice also that we could have used a much more restrictive level of significance. In fact, the smallest p-value among all tests could yield us an $\alpha$ for which all tests would still pass and make our reasearch mush more significant, but such is considered a bad practice. Remember the term _p-hacking_ for future reference and frown upon anyone who abuses statistics in this fashion.

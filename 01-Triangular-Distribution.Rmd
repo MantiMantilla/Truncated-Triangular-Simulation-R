@@ -2,21 +2,21 @@
 
 ## Distributions
 
-Probability density functions describe how likely it is for a continuous random variable $X$ to fall within some region of its domain. For any single point the probability is cero but at intervals we can calculate the integral of the PDF and find the corresponding probability. Consider the following conventions:
+Probability density functions describe how likely it is for a continuous random variable $Y$ to fall within some region of its domain. For any single point the probability is cero but at intervals we can calculate the integral of the PDF and find the corresponding probability. Consider the following conventions:
 
-> Let $X$ be a random variable with distribution $f(x)$
+> Let $Y$ be a random variable with distribution $f(y)$
 
 This way of defining random variables lets on some basic information about how it may behave but is lengthy and unnecessary.
 
-> Let $X\sim f(x)$
+> Let $Y\sim f(y)$
 
 Much better.
 
-> Let $X\sim f(x) = \frac{e^{-\frac{1}{2}\left( \frac{x-\mu}{\sigma}\right)^{2}}}{\sigma \sqrt{2\pi}}$
+> Let $Y\sim f(y) = \frac{e^{-\frac{1}{2}\left( \frac{y-\mu}{\sigma}\right)^{2}}}{\sigma \sqrt{2\pi}}$
 
 A PDF will sometimes be defined for the entire real number line in a single expression like the ubiquitous normal distribution, while others require you to write piecewise functions such as the triangular distribution.
 
-> Let $X\sim Norm(\mu, \sigma^{2})$ and $Y\sim Triangular(L,U,M)$
+> Let $Y\sim Norm(\mu, \sigma^{2})$ and $X\sim Triangular(L,U,M)$
 
 We use a shorthand notation for widely used distributions that would usually take too much effort to remember or write out.
 
