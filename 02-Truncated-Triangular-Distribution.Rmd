@@ -317,11 +317,11 @@ $$
 Case 3 ($M \leq a \leq b \leq U$):
 
 $$
-  E(X)=\frac{\int_{M}^{b} x \cdot \frac{2(U-x)}{(U-L)(U-M)} dx}{F(b)-F(a)}
+  E(X)=\frac{\int_{a}^{b} x \cdot \frac{2(U-x)}{(U-L)(U-M)} dx}{F(b)-F(a)}
 $$
 
 $$
-  = \frac{\frac{3b^2U-3M^2U-2b^3+2M^3}{3\left(U-L\right)\left(U-M\right)}}{F(b)-F(a)}
+  = \frac{\frac{-2a^3+b^2\left(2b-3U\right)+3a^2 U}{3\left(L-U\right)\left(U-M\right)}}{F(b)-F(a)}
 $$
 
 ### Median
@@ -378,11 +378,11 @@ $$
 Case 3 ($M \leq a \leq b \leq U$):
 
 $$
-  \text{Var}(X)=\frac{\int_{M}^{b} x^{2} \cdot \frac{2(U-x)}{(U-L)(U-M)} dx}{F(b)-F(a)}-E(X)^{2}
+  \text{Var}(X)=\frac{\int_{a}^{b} x^{2} \cdot \frac{2(U-x)}{(U-L)(U-M)} dx}{F(b)-F(a)}-E(X)^{2}
 $$
 
 $$
-  = \frac{\frac{4b^3U-4M^3U-3b^4+3M^4}{6\left(U-L\right)\left(U-M\right)}}{F(b)-F(a)}-E(X)^{2}
+  = \frac{\frac{-3a^4+4a^3U+b^3(3b-4U)}{6\left(L-U\right)\left(U-M\right)}}{F(b)-F(a)}-E(X)^{2}
 $$
 
 ## An Object to Hold These Properties
@@ -455,7 +455,7 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
     result.numerator / result.denominator
   } else if (M <= a & a <= b) {
     result.numerator <-
-      (3 * b ^ 2 * U - 3 * a ^ 2 * U - 2 * b ^ 3 + 2 * a ^ 3) / (3 * (U - L) * (U - M))
+      (-2 * (a ^ 3) + (b ^ 2)* (2 * b - 3 * U) + 3 * (a ^ 2) * U) / (3* (L - U) * (U - M))
     result.denominator <-
       orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     result.numerator / result.denominator
@@ -497,7 +497,7 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
     (result.numerator / result.denominator) - trun.tri.mean ^ 2
   } else if (M <= a & a <= b) {
     result.numerator <-
-      (4 * (b ^ 3) * U - 4 * (a ^ 3) * U - 2 * b ^ 4 + 3 * a ^ 4) / (6 * (U - L) * (U - M))
+      (-3 * (a ^ 4) + 4 * (a ^ 3) * U + (b ^ 3) * (3 * b - 4 * U)) / (6 * (L - U) * (U - M))
     result.denominator <-
       orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
     (result.numerator / result.denominator) - trun.tri.mean ^ 2
