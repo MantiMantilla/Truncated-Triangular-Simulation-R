@@ -8,7 +8,7 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   L <- orig.tri.dist$tri.lower
   U <- orig.tri.dist$tri.upper
   
-  ## Throw an error if the new bounds do not fall witin the old bounds of the triangular pdf.
+  ## Throw an error if the new bounds do not fall within the old bounds of the triangular pdf.
   if (a < L | b > U) {
     stop("The new bounds of the pdf do not fall within the original range")
   }
@@ -47,27 +47,17 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   }
   
   ## Create a vector of length 1 that describes the mean of the distribution
-  trun.tri.mean <- if (a <= b & b < M) {
-    result.numerator <-
-      (2 * (-3 * L * ((b ^ 2) / 2 - (a ^ 2) / 2) + b ^ 3 - a ^ 3)) / (3 * (U - L) * (M - L))
-    result.denominator <-
-      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
-    result.numerator / result.denominator
+  trun.tri.denominator <- (orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a))
+  trun.tri.meanNumerator <- if (a <= b & b < M) {
+    (2 * (-3 * L * ((b ^ 2) / 2 - (a ^ 2) / 2) + b ^ 3 - a ^ 3)) / (3 * (U - L) * (M - L))
   } else if (a < M & b >= M) {
-    result.numerator <-
-      (
-        -M ^ 3 * U - 2 * a ^ 3 * U + 3 * L * a ^ 2 * U + 3 * M * b ^ 2 * U - 3 * L * b ^ 2 * U + L * M ^ 3 + 2 * M * a ^ 3 - 3 * L * M * a ^ 2 - 2 * M * b ^ 3 + 2 * L * b ^ 3
-      ) / (3 * (U - L) * (M - L) * (U - M))
-    result.denominator <-
-      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
-    result.numerator / result.denominator
+    (
+      -M ^ 3 * U - 2 * a ^ 3 * U + 3 * L * a ^ 2 * U + 3 * M * b ^ 2 * U - 3 * L * b ^ 2 * U + L * M ^ 3 + 2 * M * a ^ 3 - 3 * L * M * a ^ 2 - 2 * M * b ^ 3 + 2 * L * b ^ 3
+    ) / (3 * (U - L) * (M - L) * (U - M))
   } else if (M <= a & a <= b) {
-    result.numerator <-
-      (3 * b ^ 2 * U - 3 * a ^ 2 * U - 2 * b ^ 3 + 2 * a ^ 3) / (3 * (U - L) * (U - M))
-    result.denominator <-
-      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
-    result.numerator / result.denominator
+    (-2 * (a ^ 3) + (b ^ 2)* (2 * b - 3 * U) + 3 * (a ^ 2) * U) / (3* (L - U) * (U - M))
   }
+  trun.tri.mean <- (trun.tri.meanNumerator / trun.tri.denominator)
   
   ## Create a vector of length 1 that describes the median of the distribution
   
@@ -89,28 +79,17 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
   trun.tri.lower <- a
   
   ## Create a vector of length 1 that describes the variance of the distribution
-  trun.tri.var <- if (a <= b & b < M) {
-    result.numerator <-
-      (-4 * L * ((b ^ 3) / 3 - (a ^ 3) / 3) + b ^ 4 - a ^ 4) / (2 * (U - L) * (M - L))
-    result.denominator <-
-      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
-    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+  trun.tri.varNumerator <- if (a <= b & b < M) {
+    (-4 * L * ((b ^ 3) / 3 - (a ^ 3) / 3) + b ^ 4 - a ^ 4) / (2 * (U - L) * (M - L))
   } else if (a < M & b >= M) {
-    result.numerator <-
-      (
-        -M ^ 4 * U - 3 * a ^ 4 * U + 4 * L * a ^ 3 * U + 4 * M * b ^ 3 * U - 4 * L * b ^ 3 * U + L * M ^ 4 + 3 * M * a ^ 4 - 4 * L * M * a ^ 3 - 3 * M * b ^ 4 + 3 * L * b ^ 4
-      ) / (6 * (U - L) * (M - L) * (U - M))
-    result.denominator <-
-      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
-    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+    (
+      -M ^ 4 * U - 3 * a ^ 4 * U + 4 * L * a ^ 3 * U + 4 * M * b ^ 3 * U - 4 * L * b ^ 3 * U + L * M ^ 4 + 3 * M * a ^ 4 - 4 * L * M * a ^ 3 - 3 * M * b ^ 4 + 3 * L * b ^ 4
+    ) / (6 * (U - L) * (M - L) * (U - M))
   } else if (M <= a & a <= b) {
-    result.numerator <-
-      (4 * (b ^ 3) * U - 4 * (a ^ 3) * U - 2 * b ^ 4 + 3 * a ^ 4) / (6 * (U - L) * (U - M))
-    result.denominator <-
-      orig.tri.dist$cdf(b) - orig.tri.dist$cdf(a)
-    (result.numerator / result.denominator) - trun.tri.mean ^ 2
+    (-3 * (a ^ 4) + 4 * (a ^ 3) * U + (b ^ 3) * (3 * b - 4 * U)) / (6 * (L - U) * (U - M))
   }
-  
+  trun.tri.var <- (trun.tri.varNumerator / trun.tri.denominator) - (trun.tri.mean ^ 2)
+
   ## Build the list and return it. This list contains all major properties of the truncated triangular distribution
   return(
     list(
@@ -122,7 +101,8 @@ generate.truncated.triangular <- function(a, b, orig.tri.dist) {
       trun.tri.mode = trun.tri.mode,
       trun.tri.upper = trun.tri.upper,
       trun.tri.lower = trun.tri.lower,
-      trun.tri.var = trun.tri.var
+      trun.tri.var = trun.tri.var,
+      trun.tri.originalarguments = list(L=L,a=a,M=M,b=b,U=U)
     )
   )
 }
